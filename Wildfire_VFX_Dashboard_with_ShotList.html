@@ -1,11 +1,12 @@
 
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【野火】特效製作評估 - 正確版</title>
+    <title>【野火】特效製作分析- 最終版</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
         :root {
             --bg-color: #121212;
@@ -45,7 +46,7 @@
             font-weight: bold;
         }
         .tab-btn:hover { background: #444; }
-        .tab-btn.active { background: var(--accent-blue); }
+        .tab-btn.active { background: var(--accent-blue); transform: scale(1.05); }
         
         .dashboard-view { display: block; }
         .dashboard-view.hidden { display: none; }
@@ -78,8 +79,12 @@
             background: var(--card-bg); 
             padding: 20px; 
             border-radius: 10px; 
+            display: flex;
+            flex-direction: column;
         }
         .chart-card h3 { margin-top: 0; color: #aaa; border-bottom: 1px solid #333; padding-bottom: 10px;}
+        
+        .chart-container-inner { flex-grow: 1; position: relative; display: flex; justify-content: center; align-items: center; min-height: 250px; }
         
         .bar-wrapper { display: flex; align-items: center; margin-bottom: 12px; }
         .bar-label { width: 100px; font-size: 14px; }
@@ -97,6 +102,7 @@
             padding: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             overflow-x: auto;
+            max-height: 700px;
         }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 12px 15px; border-bottom: 1px solid #333; }
@@ -113,7 +119,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>《野火》特效決策儀表板</h1>
+            <h1>《野火》特效製作分析</h1>
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('heavy', this)">大幅度減齡方案</button>
                 <button class="tab-btn" onclick="switchTab('smooth', this)">2D磨皮方案</button>
@@ -122,7 +128,6 @@
             </div>
         </header>
 
-        <!-- Dashboard View -->
         <div id="dashboard-view" class="dashboard-view">
             <div id="actor-note" class="note">
                 <strong>💡 演員方案說明：</strong><br>
@@ -147,7 +152,9 @@
             <div class="chart-grid">
                 <div class="chart-card">
                     <h3>星級費用佔比 (Star Rating)</h3>
-                    <div id="star-charts"></div>
+                    <div class="chart-container-inner">
+                        <canvas id="pieChart"></canvas>
+                    </div>
                 </div>
                 <div class="chart-card">
                     <h3>特效類別鏡頭數 (Category)</h3>
@@ -156,23 +163,14 @@
             </div>
         </div>
 
-        <!-- Table View -->
         <div id="table-view" class="table-view">
             <div class="table-container">
                 <h3 style="margin-top: 0; color: #aaa; border-bottom: 1px solid #333; padding-bottom: 10px;">總計特效鏡頭明細</h3>
                 <table>
                     <thead>
-                        <tr>
-                            <th>特效類別</th>
-                            <th>場景</th>
-                            <th>集數</th>
-                            <th>場次</th>
-                            <th>內容描述</th>
-                            <th>鏡頭等級</th>
-                        </tr>
+                        <tr><th>特效類別</th><th>場景</th><th>集數</th><th>場次</th><th>內容描述</th><th>鏡頭等級</th></tr>
                     </thead>
                     <tbody>
-                        
         <tr>
             <td>畫面合成</td>
             <td></td>
@@ -1900,8 +1898,7 @@
             <td>珍將手放在蓮的腿上</td>
             <td><span class="badge badge-3">★★★</span></td>
         </tr>
-    
-                    </tbody>
+    </tbody>
                 </table>
             </div>
         </div>
@@ -1911,13 +1908,9 @@
         const data = {
             heavy: {
                 budget: '$9,230,000', shots: '472 顆', avg: '$19,555', note: false,
-                stars: [
-                    { label: '★★★', val: 79.2, color: '#3498db' },
-                    { label: '★★', val: 8.5, color: '#2ecc71' },
-                    { label: '★★★★★', val: 6.4, color: '#e74c3c' },
-                    { label: '★★★★', val: 5.3, color: '#f39c12' },
-                    { label: '★', val: 0.6, color: '#95a5a6' }
-                ],
+                pieLabels: ['★★★ (特效鏡頭)', '★★ (合成鏡頭)', '★★★★★ (特效鏡頭)', '★★★★ (特效鏡頭)', '★ (合成鏡頭)'],
+                pieData: [79.2, 8.5, 6.4, 5.3, 0.6],
+                pieColors: ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#95a5a6'],
                 cats: [
                     { label: '減齡特效', val: 318, max: 318 }, { label: '畫面合成', val: 55, max: 318 },
                     { label: '火災', val: 29, max: 318 }, { label: '年代修圖', val: 21, max: 318 },
@@ -1926,13 +1919,9 @@
             },
             smooth: {
                 budget: '$7,163,000', shots: '472 顆', avg: '$15,176', note: false,
-                stars: [
-                    { label: '★★', val: 68.6, color: '#2ecc71' },
-                    { label: '★★★', val: 15.5, color: '#3498db' },
-                    { label: '★★★★★', val: 8.3, color: '#e74c3c' },
-                    { label: '★★★★', val: 6.8, color: '#f39c12' },
-                    { label: '★', val: 0.8, color: '#95a5a6' }
-                ],
+                pieLabels: ['★★ (合成鏡頭)', '★★★ (特效鏡頭)', '★★★★★ (特效鏡頭)', '★★★★ (特效鏡頭)', '★ (合成鏡頭)'],
+                pieData: [68.6, 15.5, 8.3, 6.8, 0.8],
+                pieColors: ['#2ecc71', '#3498db', '#e74c3c', '#f39c12', '#95a5a6'],
                 cats: [
                     { label: '減齡特效', val: 318, max: 318 }, { label: '畫面合成', val: 55, max: 318 },
                     { label: '火災', val: 29, max: 318 }, { label: '年代修圖', val: 21, max: 318 },
@@ -1941,13 +1930,9 @@
             },
             actor: {
                 budget: '$3,029,000', shots: '154 顆', avg: '$19,669', note: true,
-                stars: [
-                    { label: '★★★', val: 36.7, color: '#3498db' },
-                    { label: '★★', val: 25.8, color: '#2ecc71' },
-                    { label: '★★★★★', val: 19.5, color: '#e74c3c' },
-                    { label: '★★★★', val: 16.1, color: '#f39c12' },
-                    { label: '★', val: 1.9, color: '#95a5a6' }
-                ],
+                pieLabels: ['★★★ (特效鏡頭)', '★★ (合成鏡頭)', '★★★★★ (特效鏡頭)', '★★★★ (特效鏡頭)', '★ (合成鏡頭)'],
+                pieData: [36.7, 25.8, 19.5, 16.1, 1.9],
+                pieColors: ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#95a5a6'],
                 cats: [
                     { label: '減齡特效', val: 0, max: 55, color: '#555' }, { label: '畫面合成', val: 55, max: 55 },
                     { label: '火災', val: 29, max: 55 }, { label: '年代修圖', val: 21, max: 55 },
@@ -1956,34 +1941,80 @@
             }
         };
 
-        function renderBars(containerId, items, isPercent) {
+        Chart.register(ChartDataLabels);
+
+        let myPieChart = null;
+
+        function initPieChart() {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            myPieChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.heavy.pieLabels,
+                    datasets: [{
+                        data: data.heavy.pieData,
+                        backgroundColor: data.heavy.pieColors,
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#e0e0e0', font: { size: 13, family: 'PingFang TC' } } },
+                        tooltip: {
+                            callbacks: { label: function(context) { return ' ' + context.label + ': ' + context.raw + '%'; } }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 },
+                            formatter: function(value, context) {
+                                return value > 3 ? value + '%' : ''; // 只在佔比大於 3% 時顯示，避免字擠在一起
+                            }
+                        }
+                    },
+                    cutout: '55%'
+                }
+            });
+        }
+
+        function updatePieChart(planData) {
+            if(myPieChart) {
+                myPieChart.data.labels = planData.pieLabels;
+                myPieChart.data.datasets[0].data = planData.pieData;
+                myPieChart.data.datasets[0].backgroundColor = planData.pieColors;
+                myPieChart.update();
+            }
+        }
+
+        function renderBars(containerId, items) {
             const container = document.getElementById(containerId);
             container.innerHTML = items.map(item => `
                 <div class="bar-wrapper">
                     <div class="bar-label">${item.label}</div>
                     <div class="bar-track">
-                        <div class="bar-fill" style="width: ${isPercent ? item.val : (item.val/item.max*100)}%; background-color: ${item.color || '#3498db'};"></div>
+                        <div class="bar-fill" style="width: ${(item.val/item.max*100)}%; background-color: ${item.color || '#3498db'};"></div>
                     </div>
-                    <div class="bar-percent" style="color: ${item.color || '#3498db'};">${item.val}${isPercent ? '%' : ' 顆'}</div>
+                    <div class="bar-percent" style="color: ${item.color || '#3498db'};">${item.val} 顆</div>
                 </div>
             `).join('');
         }
 
         function switchTab(tabKey, btn) {
-            // Reset buttons
             document.querySelectorAll('.tab-btn').forEach(b => {
                 b.classList.remove('active');
                 if(b.innerText.includes('演員')) b.style.background = '#e74c3c';
                 else if(b.innerText.includes('清單')) b.style.background = '#8e44ad';
                 else b.style.background = '#333';
+                b.style.transform = 'scale(1)';
             });
             
-            // Set active button styling
             btn.classList.add('active');
             if(tabKey === 'actor') btn.style.background = '#c0392b';
             if(tabKey === 'list') btn.style.background = '#732d91';
+            btn.style.transform = 'scale(1.05)';
 
-            // Toggle Views
             const dashView = document.getElementById('dashboard-view');
             const tableView = document.getElementById('table-view');
 
@@ -1994,7 +2025,6 @@
                 dashView.classList.remove('hidden');
                 tableView.classList.remove('active');
                 
-                // Update Dashboard Data
                 const d = data[tabKey];
                 document.getElementById('kpi-budget').innerText = d.budget;
                 document.getElementById('kpi-shots').innerText = d.shots;
@@ -2003,14 +2033,13 @@
                 if(d.note) document.getElementById('actor-note').classList.add('active');
                 else document.getElementById('actor-note').classList.remove('active');
 
-                renderBars('star-charts', d.stars, true);
-                renderBars('cat-charts', d.cats, false);
+                updatePieChart(d);
+                renderBars('cat-charts', d.cats);
             }
         }
 
-        // Init
-        renderBars('star-charts', data['heavy'].stars, true);
-        renderBars('cat-charts', data['heavy'].cats, false);
+        initPieChart();
+        renderBars('cat-charts', data['heavy'].cats);
     </script>
 </body>
 </html>
