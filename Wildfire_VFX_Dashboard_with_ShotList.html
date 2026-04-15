@@ -1,10 +1,11 @@
 
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【野火】特效製作決策儀表板 - 完整版</title>
+    <title>【野火】特效製作決策儀表板 - 正確版</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -121,7 +122,7 @@
             </div>
         </header>
 
-        <!-- Dashboard View (Charts & KPIs) -->
+        <!-- Dashboard View -->
         <div id="dashboard-view" class="dashboard-view">
             <div id="actor-note" class="note">
                 <strong>💡 演員方案說明：</strong><br>
@@ -131,7 +132,7 @@
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <span class="kpi-label">總預算 (TWD)</span>
-                    <span class="kpi-value" id="kpi-budget">$15,431,000</span>
+                    <span class="kpi-value" id="kpi-budget">$9,230,000</span>
                 </div>
                 <div class="kpi-card">
                     <span class="kpi-label">總鏡頭數</span>
@@ -139,7 +140,7 @@
                 </div>
                 <div class="kpi-card">
                     <span class="kpi-label">單顆平均成本</span>
-                    <span class="kpi-value" id="kpi-avg" style="color:var(--accent-orange);">$32,693</span>
+                    <span class="kpi-value" id="kpi-avg" style="color:var(--accent-orange);">$19,555</span>
                 </div>
             </div>
 
@@ -155,10 +156,10 @@
             </div>
         </div>
 
-        <!-- Table View (Shot List) -->
+        <!-- Table View -->
         <div id="table-view" class="table-view">
             <div class="table-container">
-                <h3 style="margin-top: 0; color: #aaa; border-bottom: 1px solid #333; padding-bottom: 10px;">總計 472 顆特效鏡頭明細</h3>
+                <h3 style="margin-top: 0; color: #aaa; border-bottom: 1px solid #333; padding-bottom: 10px;">總計特效鏡頭明細</h3>
                 <table>
                     <thead>
                         <tr>
@@ -1909,22 +1910,22 @@
     <script>
         const data = {
             heavy: {
-                budget: '$15,431,000', shots: '472 顆', avg: '$32,693', note: false,
+                budget: '$9,230,000', shots: '472 顆', avg: '$19,555', note: false,
                 stars: [
-                    { label: '★★★', val: 87.6, color: '#3498db' },
-                    { label: '★★', val: 5.1, color: '#2ecc71' },
-                    { label: '★★★★★', val: 3.8, color: '#e74c3c' },
-                    { label: '★★★★', val: 3.1, color: '#f39c12' },
-                    { label: '★', val: 0.4, color: '#95a5a6' }
+                    { label: '★★★', val: 79.2, color: '#3498db' },
+                    { label: '★★', val: 8.5, color: '#2ecc71' },
+                    { label: '★★★★★', val: 6.4, color: '#e74c3c' },
+                    { label: '★★★★', val: 5.3, color: '#f39c12' },
+                    { label: '★', val: 0.6, color: '#95a5a6' }
                 ],
                 cats: [
                     { label: '減齡特效', val: 318, max: 318 }, { label: '畫面合成', val: 55, max: 318 },
                     { label: '火災', val: 29, max: 318 }, { label: '年代修圖', val: 21, max: 318 },
-                    { label: '人群複製', val: 18, max: 318 }, { label: '雨/血/動物/車', val: 31, max: 318 }
+                    { label: '人群複製', val: 18, max: 318 }, { label: '其他', val: 31, max: 318 }
                 ]
             },
             smooth: {
-                budget: '$13,364,000', shots: '472 顆', avg: '$28,313', note: false,
+                budget: '$7,163,000', shots: '472 顆', avg: '$15,176', note: false,
                 stars: [
                     { label: '★★', val: 68.6, color: '#2ecc71' },
                     { label: '★★★', val: 15.5, color: '#3498db' },
@@ -1935,11 +1936,11 @@
                 cats: [
                     { label: '減齡特效', val: 318, max: 318 }, { label: '畫面合成', val: 55, max: 318 },
                     { label: '火災', val: 29, max: 318 }, { label: '年代修圖', val: 21, max: 318 },
-                    { label: '人群複製', val: 18, max: 318 }, { label: '雨/血/動物/車', val: 31, max: 318 }
+                    { label: '人群複製', val: 18, max: 318 }, { label: '其他', val: 31, max: 318 }
                 ]
             },
             actor: {
-                budget: '$3,029,000', shots: '154 顆', avg: '$19,668', note: true,
+                budget: '$3,029,000', shots: '154 顆', avg: '$19,669', note: true,
                 stars: [
                     { label: '★★★', val: 36.7, color: '#3498db' },
                     { label: '★★', val: 25.8, color: '#2ecc71' },
@@ -1950,7 +1951,7 @@
                 cats: [
                     { label: '減齡特效', val: 0, max: 55, color: '#555' }, { label: '畫面合成', val: 55, max: 55 },
                     { label: '火災', val: 29, max: 55 }, { label: '年代修圖', val: 21, max: 55 },
-                    { label: '人群複製', val: 18, max: 55 }, { label: '雨/血/動物/車', val: 31, max: 55 }
+                    { label: '人群複製', val: 18, max: 55 }, { label: '其他', val: 31, max: 55 }
                 ]
             }
         };
