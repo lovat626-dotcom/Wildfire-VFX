@@ -1,0 +1,2015 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【野火】特效製作決策儀表板 - 完整版</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-blue: #3498db;
+            --accent-green: #2ecc71;
+            --accent-red: #e74c3c;
+            --accent-orange: #f39c12;
+            --accent-purple: #9b59b6;
+        }
+        body { 
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container { max-width: 1200px; margin: auto; }
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 20px; 
+            margin-bottom: 30px;
+        }
+        .tabs { display: flex; gap: 10px; }
+        .tab-btn { 
+            padding: 10px 20px; 
+            cursor: pointer; 
+            background: #333; 
+            border: none; 
+            color: white; 
+            border-radius: 5px; 
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        .tab-btn:hover { background: #444; }
+        .tab-btn.active { background: var(--accent-blue); }
+        
+        .dashboard-view { display: block; }
+        .dashboard-view.hidden { display: none; }
+        .table-view { display: none; }
+        .table-view.active { display: block; }
+
+        .kpi-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 20px; 
+            margin-bottom: 30px; 
+        }
+        .kpi-card { 
+            background: var(--card-bg); 
+            padding: 25px; 
+            border-radius: 10px; 
+            text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .kpi-value { font-size: 32px; font-weight: bold; color: var(--accent-green); display: block; margin: 10px 0;}
+        .kpi-label { color: #888; font-size: 14px;}
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .chart-card {
+            background: var(--card-bg); 
+            padding: 20px; 
+            border-radius: 10px; 
+        }
+        .chart-card h3 { margin-top: 0; color: #aaa; border-bottom: 1px solid #333; padding-bottom: 10px;}
+        
+        .bar-wrapper { display: flex; align-items: center; margin-bottom: 12px; }
+        .bar-label { width: 100px; font-size: 14px; }
+        .bar-track { flex-grow: 1; background: #333; height: 16px; border-radius: 8px; overflow: hidden; }
+        .bar-fill { height: 100%; transition: width 0.6s ease-in-out, background-color 0.6s; }
+        .bar-percent { width: 60px; text-align: right; font-size: 14px; font-weight: bold;}
+        
+        .note { background: rgba(243, 156, 18, 0.1); border-left: 4px solid var(--accent-orange); padding: 15px; margin-bottom: 20px; border-radius: 4px; display: none; line-height: 1.5;}
+        .note.active { display: block; }
+
+        /* Table Styles */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            overflow-x: auto;
+        }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 12px 15px; border-bottom: 1px solid #333; }
+        th { background-color: #2a2a2a; color: var(--accent-blue); position: sticky; top: 0; }
+        tr:hover { background-color: #2a2a2a; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; color: #fff; background: #555; }
+        .badge-5 { background: #e74c3c; }
+        .badge-4 { background: #f39c12; }
+        .badge-3 { background: #3498db; }
+        .badge-2 { background: #2ecc71; }
+        .badge-1 { background: #95a5a6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>《野火》特效決策儀表板</h1>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('heavy', this)">大幅度方案</button>
+                <button class="tab-btn" onclick="switchTab('smooth', this)">經濟方案</button>
+                <button class="tab-btn" style="background:#e74c3c;" onclick="switchTab('actor', this)">演員方案 (移除減齡)</button>
+                <button class="tab-btn" style="background:#8e44ad;" onclick="switchTab('list', this)">📋 完整鏡頭清單</button>
+            </div>
+        </header>
+
+        <!-- Dashboard View (Charts & KPIs) -->
+        <div id="dashboard-view" class="dashboard-view">
+            <div id="actor-note" class="note">
+                <strong>💡 演員方案說明：</strong><br>
+                此方案將 318 顆「減齡特效」完全移除，改由實體化妝或年輕演員替代。總預算大幅降至 300 萬初頭，團隊將能把資源全數集中在火災、撞車等核心硬核特效上。
+            </div>
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <span class="kpi-label">總預算 (TWD)</span>
+                    <span class="kpi-value" id="kpi-budget">$15,431,000</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">總鏡頭數</span>
+                    <span class="kpi-value" id="kpi-shots" style="color:var(--accent-blue);">472 顆</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">單顆平均成本</span>
+                    <span class="kpi-value" id="kpi-avg" style="color:var(--accent-orange);">$32,693</span>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>星級費用佔比 (Star Rating)</h3>
+                    <div id="star-charts"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>特效類別鏡頭數 (Category)</h3>
+                    <div id="cat-charts"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table View (Shot List) -->
+        <div id="table-view" class="table-view">
+            <div class="table-container">
+                <h3 style="margin-top: 0; color: #aaa; border-bottom: 1px solid #333; padding-bottom: 10px;">總計 472 顆特效鏡頭明細</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>特效類別</th>
+                            <th>場景</th>
+                            <th>集數</th>
+                            <th>場次</th>
+                            <th>內容描述</th>
+                            <th>鏡頭等級</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr>
+            <td>畫面合成</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="badge badge-s"></span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>週刊雜誌社 會議室/辦公區</td>
+            <td>7</td>
+            <td>6</td>
+            <td>白板貼著週刊新封面,同仁鼓勵丁</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>週刊雜誌社 辦公區</td>
+            <td>11</td>
+            <td>7</td>
+            <td>安心睡著,丁發現熊桌面學合照</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>週刊雜誌社 辦公區</td>
+            <td>12</td>
+            <td>7</td>
+            <td>丁累趴桌面睡著, 幫蓋衣後離去</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>週刊雜誌社 辦公區</td>
+            <td>51</td>
+            <td>8</td>
+            <td>審查會名單官官相護,</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>週刊雜誌社 辦公區</td>
+            <td>17</td>
+            <td>10</td>
+            <td>丁收拾資料,不想再報導</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>丁潮湧家 客廳</td>
+            <td>50E</td>
+            <td>6</td>
+            <td>雅看著各家新聞報導,現場有丁</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>彭莉蓮別墅</td>
+            <td>37</td>
+            <td>8</td>
+            <td>要學在股東會反對陽</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>周理行家 客廳</td>
+            <td>24</td>
+            <td>1</td>
+            <td>蔡看新聞得知林亡,著急找照</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>洪珮如辦公室 0</td>
+            <td>44B</td>
+            <td>7</td>
+            <td>如靠著椅背微笑</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>高德奎家 0</td>
+            <td>7</td>
+            <td>44E</td>
+            <td>高表情陰沈</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>醫院 周理行病房:</td>
+            <td>44A</td>
+            <td>7</td>
+            <td>兩人看著新聞的 記者會</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>醫院 周理行病房</td>
+            <td>17</td>
+            <td>8</td>
+            <td>思從新聞上看到吳照片吃吃驚</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>洪炳記者會 10</td>
+            <td>18</td>
+            <td>7</td>
+            <td>陽強調司法迫害,如另開股東會突襲</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>臺鳳翔家 0</td>
+            <td>44C</td>
+            <td>7</td>
+            <td>在家中垂頭喪氣</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>趙元生家 10</td>
+            <td>44D</td>
+            <td>7</td>
+            <td>趙在家中沈默不語</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>小吃店 0</td>
+            <td>44F</td>
+            <td>7</td>
+            <td>塚笑容詭異</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>各種螢幕空間 0</td>
+            <td>1D</td>
+            <td>4</td>
+            <td>新聞報導虹昶集團案件</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>大街小巷 電視螢幕</td>
+            <td>37</td>
+            <td>9</td>
+            <td>不同的新聞畫面播報章排</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>招待所 0</td>
+            <td>10</td>
+            <td>5A</td>
+            <td>高赤裸上身與兩位女子親密</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>各種出遊畫面 各種場景</td>
+            <td>53A</td>
+            <td>10</td>
+            <td>一家人各種出遊畫面</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>醫院 樓梯</td>
+            <td>38</td>
+            <td>9</td>
+            <td>看著行車紀錄器影像</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>周理行家 火災後恩熙房-整理</td>
+            <td>3A</td>
+            <td>9</td>
+            <td>熙看著股東會直播,臉色陰沈</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>周理行家 火災後恩熙房-整理</td>
+            <td>7</td>
+            <td>9</td>
+            <td>網路直播控訴司法不公</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>彭莉蓮別墅 暗房</td>
+            <td>22</td>
+            <td>3</td>
+            <td>學教 沖洗底片,兩人雙手碰觸接吻</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>國家圖書館 縮圖室</td>
+            <td>37</td>
+            <td>2</td>
+            <td>兩人查詢曹死的相關報導</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>國家圖書館 縮圖室</td>
+            <td>21</td>
+            <td>4</td>
+            <td>丁專心看著各種舊時的報章雜誌</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>畫面合成</td>
+            <td>立法院 場</td>
+            <td>10</td>
+            <td>3</td>
+            <td>高走進議場,眾家媒體拍照</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="badge badge-s"></span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td>台北街道 火災現場1</td>
+            <td>3A</td>
+            <td>1</td>
+            <td>恩熙遇火場,初遇Andy</td>
+            <td><span class="badge badge-4">★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td>台北街道 火災現場1</td>
+            <td>3B</td>
+            <td>1</td>
+            <td>恩熙抱貓屍,學關心</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td>台北街道 火災現場1</td>
+            <td>45</td>
+            <td>1</td>
+            <td>學送 當時在火場照片</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td>台北街道 火災現場2-大樓</td>
+            <td>31B</td>
+            <td>5</td>
+            <td>大樓陷火海,人員逃竄,熙看著火星</td>
+            <td><span class="badge badge-5">★★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td>周理行家 火災現場3</td>
+            <td>31</td>
+            <td>6</td>
+            <td>看見家火燒理急救中,崩潰大叫</td>
+            <td><span class="badge badge-4">★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td>周理行家 火災現場3</td>
+            <td>33</td>
+            <td>6</td>
+            <td>思望著火災,一切都沒了</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td>周理行家 火災現場3-災後樓下</td>
+            <td>7</td>
+            <td>8</td>
+            <td>熙望上火災後的家,神情哀傷</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td>周理行家 火災現場3-災後樓下</td>
+            <td>34</td>
+            <td>7</td>
+            <td>吳望著火災後周家</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td>周理行家 火災現場3-災後樓下</td>
+            <td>27</td>
+            <td>7</td>
+            <td>熙走進火災後的家</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td>郊區平房 0</td>
+            <td>30</td>
+            <td>9</td>
+            <td>大火吞噬平房,昌的屍體被燒</td>
+            <td><span class="badge badge-5">★★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>火災</td>
+            <td>郊區平房 0</td>
+            <td>34</td>
+            <td>9</td>
+            <td>平房被大火吞噬</td>
+            <td><span class="badge badge-5">★★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>雨 / 血</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="badge badge-s"></span></td>
+        </tr>
+    
+        <tr>
+            <td>雨/血</td>
+            <td>市郊廢棄公寓 0</td>
+            <td>10</td>
+            <td>37</td>
+            <td>陽掐住 脖子</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>雨/血</td>
+            <td>曹以齊境 0</td>
+            <td>5L</td>
+            <td>8</td>
+            <td>大雨中熙撐傘墳前,手中的花吹歪</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>雨/血</td>
+            <td>虹昶集團 董事長辦公室</td>
+            <td>8</td>
+            <td>39</td>
+            <td>塚將 鑽刺進 脖子</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>雨/血</td>
+            <td>療養院 洪炳陽房</td>
+            <td>44</td>
+            <td>10</td>
+            <td>陽狹持蓮用刀傷,學抱母痛哭</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>雨/血</td>
+            <td>彭莉蓮別墅 0</td>
+            <td>27E</td>
+            <td>9</td>
+            <td>陽眼中充滿血絲</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>飛機/鳥 /蜘蛛</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="badge badge-s"></span></td>
+        </tr>
+    
+        <tr>
+            <td>飛機/鳥 /蜘蛛</td>
+            <td>虹昶集團 股東會迴廊</td>
+            <td>2</td>
+            <td>9</td>
+            <td>學望著天空,牽起萍的手</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>飛機/鳥 /蜘蛛</td>
+            <td>彭莉蓮別墅 庭院</td>
+            <td>9</td>
+            <td>1</td>
+            <td>與學躺在草地上望天</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>飛機/鳥 /蜘蛛</td>
+            <td>高級會館 洪珮如房</td>
+            <td>4</td>
+            <td>4</td>
+            <td>如倚靠窗邊品酒</td>
+            <td><span class="badge badge-2">★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>飛機/鳥 /蜘蛛</td>
+            <td>洪珮如辦公室 0</td>
+            <td>33</td>
+            <td>5</td>
+            <td>報告珍要將股權移轉給昌</td>
+            <td><span class="badge badge-4">★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>飛機/鳥 /蜘蛛</td>
+            <td>洪珮如辦公室 0</td>
+            <td>8</td>
+            <td>24</td>
+            <td>如要奪回屬於她的,兩人一同合作</td>
+            <td><span class="badge badge-4">★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>飛機/鳥 /蜘蛛</td>
+            <td>洪珮如辦公室 0</td>
+            <td>25</td>
+            <td>9</td>
+            <td>熙詢問 知不知道珍與蓮的緋聞</td>
+            <td><span class="badge badge-4">★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>人群複製</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="badge badge-s"></span></td>
+        </tr>
+    
+        <tr>
+            <td>人群複製</td>
+            <td>虹昶集團 股東會</td>
+            <td>9</td>
+            <td>3</td>
+            <td>股東會上陽勝利當選</td>
+            <td><span class="badge badge-4">★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>人群複製</td>
+            <td>虹昶集團 臨時股東會</td>
+            <td>10</td>
+            <td>20B</td>
+            <td>虹昶集團重新選舉董事監事 學</td>
+            <td><span class="badge badge-4">★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>人群複製</td>
+            <td>台南棒球場 0</td>
+            <td>7</td>
+            <td>21</td>
+            <td>高快步走在人群中</td>
+            <td><span class="badge badge-4">★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>人群複製</td>
+            <td>台南棒球場 貴賓室</td>
+            <td>24</td>
+            <td>3</td>
+            <td>秦有信心說服章扣押保險箱證據</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>人群複製</td>
+            <td>台南棒球場 貴賓室</td>
+            <td>22</td>
+            <td>7</td>
+            <td>陽稱金流保密,眾人都在同條船</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>人群複製</td>
+            <td>表演廳 廳內</td>
+            <td>8</td>
+            <td>3</td>
+            <td>在台上演奏, 入迷</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>人群複製</td>
+            <td>臺南飯店宴席廳 0</td>
+            <td>13</td>
+            <td>2</td>
+            <td>陽宴請警友會/警察/檢調</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>人群複製</td>
+            <td>婚宴餐廳 0</td>
+            <td>14</td>
+            <td>3</td>
+            <td>婚宴,逐桌敬酒</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>人群複製</td>
+            <td>洪成珍堂 0</td>
+            <td>10</td>
+            <td>16</td>
+            <td>在靈堂上宣告握有陽的秘密</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>撞車</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="badge badge-s"></span></td>
+        </tr>
+    
+        <tr>
+            <td>撞車</td>
+            <td>靜的 靈小路 劉芳菲車上</td>
+            <td>39</td>
+            <td>5</td>
+            <td>被後車逼車, 車撞上山壁</td>
+            <td><span class="badge badge-5">★★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>撞車</td>
+            <td>台北街頭 0</td>
+            <td>8</td>
+            <td>34</td>
+            <td>丁在街道狂飆,搶黃燈被攔腰撞上</td>
+            <td><span class="badge badge-5">★★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>撞車</td>
+            <td>市郊廢棄公寓-街道 廢棄公寓外街道</td>
+            <td>35</td>
+            <td>10</td>
+            <td>陽追撞車,陽跪下求原諒,撲倒</td>
+            <td><span class="badge badge-5">★★★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>年代修圖</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="badge badge-s"></span></td>
+        </tr>
+    
+        <tr>
+            <td>年代修圖</td>
+            <td>立法院 大門/街道</td>
+            <td>7</td>
+            <td>10</td>
+            <td>高跑到馬路差點被車撞,一身狼狽</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>年代修圖</td>
+            <td>市郊廢棄公寓 戶外</td>
+            <td>38</td>
+            <td>2</td>
+            <td>疑車內自殺,丁拍照見疑點</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>年代修圖</td>
+            <td>普通公寓 原廢棄公寓</td>
+            <td>50</td>
+            <td>10</td>
+            <td>熙回憶起他記得父親</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>年代修圖</td>
+            <td>湯姆熊遊樂場 0</td>
+            <td>5</td>
+            <td>3</td>
+            <td>與林在遊樂場對決電玩</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>年代修圖</td>
+            <td>夜市 小吃攤</td>
+            <td>9</td>
+            <td>3</td>
+            <td>三人一同開心吃宵夜</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>年代修圖</td>
+            <td>台北街頭 101外街道</td>
+            <td>3</td>
+            <td>3</td>
+            <td>曹在101外從容上計程車</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>年代修圖</td>
+            <td>台北街頭 10</td>
+            <td>10</td>
+            <td>3</td>
+            <td>林上計程車,思獨走回家</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>年代修圖</td>
+            <td>丁潮湧車 郊區道路</td>
+            <td>33</td>
+            <td>9</td>
+            <td>丁快車前往平房,見遠方火光</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>新聞主播台</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="badge badge-s"></span></td>
+        </tr>
+    
+        <tr>
+            <td>新聞主播台</td>
+            <td>新聞主播台 0</td>
+            <td>24A</td>
+            <td>1</td>
+            <td>主播播報林司法過勞</td>
+            <td><span class="badge badge-1">★</span></td>
+        </tr>
+    
+        <tr>
+            <td>新聞主播台</td>
+            <td>新聞主播台: 0</td>
+            <td>5A</td>
+            <td>7</td>
+            <td>主播播報虹昶集團被授</td>
+            <td><span class="badge badge-1">★</span></td>
+        </tr>
+    
+        <tr>
+            <td>新聞主播台</td>
+            <td>新聞主播台A 10</td>
+            <td>6A</td>
+            <td>7</td>
+            <td>主播播報檢調突襲台南派出所</td>
+            <td><span class="badge badge-1">★</span></td>
+        </tr>
+    
+        <tr>
+            <td>新聞主播台</td>
+            <td>新聞主播台B 0</td>
+            <td>11A</td>
+            <td>7</td>
+            <td>主播播報洪炳陽捲炒股/賄賂疑雲</td>
+            <td><span class="badge badge-1">★</span></td>
+        </tr>
+    
+        <tr>
+            <td>新聞主播台</td>
+            <td>新聞主播台C 10</td>
+            <td>11C</td>
+            <td>7</td>
+            <td>主播播報陽勞役作弊</td>
+            <td><span class="badge badge-1">★</span></td>
+        </tr>
+    
+        <tr>
+            <td>新聞主播台</td>
+            <td>新聞主播台D 0</td>
+            <td>7</td>
+            <td>110</td>
+            <td>主播播報 能否公正處理陽</td>
+            <td><span class="badge badge-1">★</span></td>
+        </tr>
+    
+        <tr>
+            <td>新聞主播台</td>
+            <td>新聞主播台 10</td>
+            <td>17A</td>
+            <td>8</td>
+            <td>電視新聞播報吳死</td>
+            <td><span class="badge badge-1">★</span></td>
+        </tr>
+    
+        <tr>
+            <td>新聞主播台</td>
+            <td>新聞主播 主播台</td>
+            <td>8</td>
+            <td>10</td>
+            <td>播報司法醜聞,</td>
+            <td><span class="badge badge-1">★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="badge badge-s"></span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>新聞主播 主播台</td>
+            <td>10</td>
+            <td>17A</td>
+            <td>主播播報司法高官認罪</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地檢署 檢察官辦公室</td>
+            <td>27</td>
+            <td>2</td>
+            <td>聽到林 泣聲,兩人聊起初表</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>招待所 10</td>
+            <td>5A</td>
+            <td>10</td>
+            <td>高赤裸上身與兩位女子親密</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>周理行家 餐廳</td>
+            <td>30A</td>
+            <td>4</td>
+            <td>周回憶從舊鋼琴找出照片</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>周理行家 家門口</td>
+            <td>4A</td>
+            <td>2</td>
+            <td>思帶照沿路敲門找工作</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>曹以齊家 客廳</td>
+            <td>21</td>
+            <td>6</td>
+            <td>曹向思說已找到證據,思低頭,曹憤恨</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>以齊家 客廳</td>
+            <td>24</td>
+            <td>6</td>
+            <td>多家銀行借錢給陽, 贏了陽就會倒</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>曹以齊家 客廳</td>
+            <td>26</td>
+            <td>6</td>
+            <td>思不想再被陷害,希望曹放棄</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>曹以齊家 書房</td>
+            <td>21A</td>
+            <td>6</td>
+            <td>翻閱卷宗找資料</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>老鄰居 門口</td>
+            <td>30</td>
+            <td>3</td>
+            <td>鄰居訴說曹家搬離,調查局搜查</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>虹昶集團 董事長辦公室</td>
+            <td>17</td>
+            <td>6</td>
+            <td>珍要 放棄上訴,曹要挑戰珍正道</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>虹昶集團 董事長辦公室</td>
+            <td>25</td>
+            <td>6</td>
+            <td>陽跪著,珍拿卷宗猛敲陽</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>虹昶集團 室外停車場</td>
+            <td>16</td>
+            <td>6</td>
+            <td>與如相會,如帶往見父</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>虹昶集團 中庭花園</td>
+            <td>18</td>
+            <td>6</td>
+            <td>如在耳邊低語吳軒輝一事,如爆笑</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>虹集團 外街道</td>
+            <td>10</td>
+            <td>25A</td>
+            <td>跟蹤,拍到珍與蓮共乘</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>虹集團 外街道</td>
+            <td>31</td>
+            <td>10</td>
+            <td>發現在跟拍</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>洪宝 洪成珍書房</td>
+            <td>10</td>
+            <td>32</td>
+            <td>蓮懷疑齊有發現她和珍秘密</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>飯店 飯店房間</td>
+            <td>33</td>
+            <td>10</td>
+            <td>陽看台北夜景想著被父打,蓮安慰</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>飯店 飯店房間</td>
+            <td>10</td>
+            <td>36</td>
+            <td>蓮擔心陽</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>飯店 飯店房間</td>
+            <td>10</td>
+            <td>38</td>
+            <td>陽電話告知蓮他殺了齊</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>飯店 飯店門口</td>
+            <td>10</td>
+            <td>40</td>
+            <td>坐上吳車</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>高爾夫球場 球場</td>
+            <td>21D</td>
+            <td>6</td>
+            <td>曹躲樹 ,錄下司法權責一同打球</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>市郊廢棄公寓 戶外</td>
+            <td>38</td>
+            <td>2</td>
+            <td>疑車內自殺,丁拍照見疑點</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>市郊廢棄公寓 戶外</td>
+            <td>6</td>
+            <td>1</td>
+            <td>陽拖著曹的屍體進車內</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>市郊廢棄公寓 10</td>
+            <td>10</td>
+            <td>37</td>
+            <td>陽掐住賣脖子</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>市郊廢棄公寓 戶外</td>
+            <td>10</td>
+            <td>39</td>
+            <td>陽掐死,跑回車上打電話</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>市郊廢棄公寓 戶外</td>
+            <td>10</td>
+            <td>41</td>
+            <td>蓮佈置自殺現場,突抓手</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>市郊廢棄公寓-街道 廢棄公寓外街道</td>
+            <td>10</td>
+            <td>35</td>
+            <td>陽追撞車,陽跪下求原諒,撲倒</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>湯姆熊遊樂場 0</td>
+            <td>6</td>
+            <td>28</td>
+            <td>曹交給林一筆錢給照,並說找到證據</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>便利商店 10</td>
+            <td>6</td>
+            <td>20</td>
+            <td>鄭拿吳的金流資料給要</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>公園涼亭 0</td>
+            <td>6</td>
+            <td>23</td>
+            <td>思不原諒林,但希望林幫</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>公園涼亭 10</td>
+            <td>6</td>
+            <td>27</td>
+            <td>要林勤</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>海灘 0</td>
+            <td>8</td>
+            <td>1</td>
+            <td>曹一家人在海灘上玩,有人溺水</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>海灘 10</td>
+            <td>8</td>
+            <td>19</td>
+            <td>游上岸,救了一件外套,思氣哭</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>海灘 營火堆</td>
+            <td>8</td>
+            <td>20</td>
+            <td>看著家人,他不想告陽了</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>海灘 帳內外</td>
+            <td>10</td>
+            <td>25</td>
+            <td>齊與思在營火前,思支持 提告</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>挫冰店 10</td>
+            <td>6</td>
+            <td>22</td>
+            <td>林吃剉冰, 娘戲問高中小女友呢</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>台北街道 圖書館外街道</td>
+            <td>10</td>
+            <td>34</td>
+            <td>齊從圖書館走出,陽開車跟蹤</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地檢署 走龍</td>
+            <td>5</td>
+            <td>6</td>
+            <td>林不滿 說謊,快步離去</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地檢署 偵查庭</td>
+            <td>5</td>
+            <td>1</td>
+            <td>林在被告席,曹眼神悲傷</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地檢署 偵查庭</td>
+            <td>5</td>
+            <td>5</td>
+            <td>曹說 林當天聚會沒有喝酒</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>台南地檢署 偵查庭</td>
+            <td>4</td>
+            <td>25C</td>
+            <td>偵訊軒並起訴</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>台南地檢署 偵查庭</td>
+            <td>6</td>
+            <td>218</td>
+            <td>偵訊曹</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 走廊</td>
+            <td>5</td>
+            <td>17</td>
+            <td>走廊上, 狼狽不願屈服,陽大笑離去</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 走廊</td>
+            <td>6</td>
+            <td>6B</td>
+            <td>陽與手下經過, 一人無助</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 法庭</td>
+            <td>6</td>
+            <td>6C</td>
+            <td>侃侃而談,法官宣判,曹判偽造文書</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 法庭</td>
+            <td>4</td>
+            <td>24</td>
+            <td>軒頂罪,曹質疑是勾串,陽露出笑意</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 法庭</td>
+            <td>5</td>
+            <td>7</td>
+            <td>陽控曹偽造定存單,賣不認罪</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 法庭</td>
+            <td>5</td>
+            <td>9</td>
+            <td>定存單被質疑,鄭 卸責醬,林不安</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 法庭</td>
+            <td>5</td>
+            <td>14</td>
+            <td>銀行副總走向證人席</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 法庭</td>
+            <td>5</td>
+            <td>16</td>
+            <td>副總指曹影響銀行信譽,被背叛</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 法庭</td>
+            <td>4</td>
+            <td>25G</td>
+            <td>軒頂罪,曹質疑是勾串,陽露出笑意</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 法庭</td>
+            <td>8</td>
+            <td>5G</td>
+            <td>方鴻財審判曹案</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 刑事法庭</td>
+            <td>4</td>
+            <td>25E</td>
+            <td>陽在法庭上原諒軒</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>以齊家 客廳/門口</td>
+            <td>4</td>
+            <td>20</td>
+            <td>林透露要去考司法考</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>曹以齊家 客廳/門口</td>
+            <td>5</td>
+            <td>2</td>
+            <td>曹與思目送林離開</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>以齊家 樓下</td>
+            <td>5</td>
+            <td>3</td>
+            <td>林酒醉稍退,決定騎車回家</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>曹以齊家 0</td>
+            <td>4</td>
+            <td>18</td>
+            <td>抓周,曹深情紀錄</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>虹昶集團 工廠角落</td>
+            <td>4</td>
+            <td>25A</td>
+            <td>陽找軒來頂罪</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>彭莉蓮別墅 花園</td>
+            <td>4</td>
+            <td>19</td>
+            <td>看著花園發呆,蓮從後環抱</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>彭莉蓮別墅 客廳</td>
+            <td>4</td>
+            <td>19A</td>
+            <td>蓮拉起陽起舞,洪無聲哭了蓮安慰</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>彭莉蓮別墅 外/大門/客廳</td>
+            <td>9</td>
+            <td>24D</td>
+            <td>珍去別墅探望學</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>彭莉蓮別墅 外街道</td>
+            <td>9</td>
+            <td>24E</td>
+            <td>珍慈愛看著學,手放上蓮大腿上</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>高爾夫球場 球場/陽傘休息區</td>
+            <td>4</td>
+            <td>23</td>
+            <td>陽要大家幫忙處理金雀案</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>高爾夫球場 陽傘休息區</td>
+            <td>4</td>
+            <td>25</td>
+            <td>高提議找人頂罪</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>高爾夫球場 陽傘休息區</td>
+            <td>5</td>
+            <td>13</td>
+            <td>彪建議可以對 提起告訴</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>高爾夫球場 陽傘休息區</td>
+            <td>5</td>
+            <td>15</td>
+            <td>建議金管會可以向銀行施壓</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>高爾夫球場 球場</td>
+            <td>5</td>
+            <td>11</td>
+            <td>建議趙用匿名檢舉,使曹被調查</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>台南棒球場 貴賓包廂</td>
+            <td>5</td>
+            <td>8</td>
+            <td>0</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>金銀行 會議室</td>
+            <td>5</td>
+            <td>12</td>
+            <td>帳目被金管會查核, 威爾賀偽造</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>金銀行 會議室</td>
+            <td>6</td>
+            <td>21C</td>
+            <td>調查局查帳務資料, 在旁陪笑</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>金金銀行 會議室</td>
+            <td>6</td>
+            <td>6A</td>
+            <td>金管會向銀行高層施壓</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>金錢銀行 辦公區</td>
+            <td>6</td>
+            <td>6D</td>
+            <td>收拾座位物品,神情落寞</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>金金銀行 大門</td>
+            <td>6</td>
+            <td>6E</td>
+            <td>兩人無語問蒼天</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>飯店 餐廳</td>
+            <td>6</td>
+            <td>6</td>
+            <td>陽宴請司法權貴</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>虹昶集團 舊廠辦交誼廳</td>
+            <td>4</td>
+            <td>25F</td>
+            <td>蓮與陽兩人在工廠結婚跳舞</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>日本料理店 10</td>
+            <td>5</td>
+            <td>10</td>
+            <td>酒後林向楠透露無擔保定存單一事</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>台北街道 巷弄</td>
+            <td>5</td>
+            <td>4</td>
+            <td>林酒逃逸</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>各種出遊畫面 各種場景</td>
+            <td>10</td>
+            <td>53A</td>
+            <td>一家人各種出遊畫面</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>派出所 0</td>
+            <td>4</td>
+            <td>258</td>
+            <td>詢問軒,製作筆錄</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>地方法院 簡易法庭</td>
+            <td>4</td>
+            <td>16</td>
+            <td>曹與陽法庭爭辦,陽口吃</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>以齊家 餐廳/客廳/廚房</td>
+            <td>3</td>
+            <td>19</td>
+            <td>三人吃火鍋,林建議定存單擔保</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>曹以齊家 客廳</td>
+            <td>10</td>
+            <td>53</td>
+            <td>思大肚子優雅彈琴,齊拍照唱歌</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>曹以齊家 臥室</td>
+            <td>4</td>
+            <td>15</td>
+            <td>DV拍攝熟睡的愛女,與妻相吻</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>虹昶集團 會議室</td>
+            <td>3</td>
+            <td>18</td>
+            <td>青陽債務協商,曹 陽自尊</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>虹昶集團 董事長辦公室</td>
+            <td>4</td>
+            <td>17</td>
+            <td>珍看公司財報,拿鞋去陽</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>金銀行 副總辦公室</td>
+            <td>3</td>
+            <td>17</td>
+            <td>示警虹集團有債務風險</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>婚宴餐廳 0</td>
+            <td>3</td>
+            <td>14</td>
+            <td>曹思婚宴,逐桌敬酒</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>婚宴餐廳 新人休息室</td>
+            <td>3</td>
+            <td>15</td>
+            <td>酒醉,謝林將思介紹給他</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>婚宴餐廳 門口</td>
+            <td>3</td>
+            <td>16</td>
+            <td>林送兩人上車,一人獨走</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>金銀行 副總辦公室</td>
+            <td>3</td>
+            <td>12</td>
+            <td>曹爭論卡價欲離職,副總將其調</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>表演廳 剪票口</td>
+            <td>3</td>
+            <td>7</td>
+            <td>兩人整理儀態走向剪票口</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>表演廳 廳內</td>
+            <td>3</td>
+            <td>8</td>
+            <td>思在台上演奏,曹入迷</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>表演廳 廳內</td>
+            <td>3</td>
+            <td>8A</td>
+            <td>散場後,曹感動落淚</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>迪斯可舞廳 舞池</td>
+            <td>3</td>
+            <td>13</td>
+            <td>曹思在舞池跳舞,曹聊著未來要想</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>湯姆熊遊樂場 10</td>
+            <td>3</td>
+            <td>5</td>
+            <td>林在遊樂場對決電玩</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>老婦人家 客廳</td>
+            <td>3</td>
+            <td>4</td>
+            <td>法院查封老婦屋,婦割腕曹</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>夜市 小吃攤</td>
+            <td>3</td>
+            <td>9</td>
+            <td>三人一同開心吃宵夜</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>台北街頭 101外街道</td>
+            <td>3</td>
+            <td>3</td>
+            <td>曹在101外從容上計程車</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>台北街頭 10</td>
+            <td>3</td>
+            <td>6</td>
+            <td>兩人喝酒在街上狂奔</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>台北街頭 0</td>
+            <td>3</td>
+            <td>10</td>
+            <td>與林上計程車,思獨走回家</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>台北街頭 巷弄</td>
+            <td>3</td>
+            <td>11</td>
+            <td>讚思的演奏,心生情愫</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>彭莉蓮別墅 庭院</td>
+            <td>9</td>
+            <td>248</td>
+            <td>陽抱著珍在庭院跳舞</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>醫院 產房</td>
+            <td>9</td>
+            <td>24C</td>
+            <td>痛苦的生產,陽抱小孩微笑</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>虹昶集團 董事長辦公室</td>
+            <td>9</td>
+            <td>24A</td>
+            <td>珍將蓮安排陽身旁做秘書</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+        <tr>
+            <td>減齡特效</td>
+            <td>洪成珍車上 0</td>
+            <td>9</td>
+            <td>24</td>
+            <td>珍將手放在蓮的腿上</td>
+            <td><span class="badge badge-3">★★★</span></td>
+        </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            heavy: {
+                budget: '$15,431,000', shots: '472 顆', avg: '$32,693', note: false,
+                stars: [
+                    { label: '★★★', val: 87.6, color: '#3498db' },
+                    { label: '★★', val: 5.1, color: '#2ecc71' },
+                    { label: '★★★★★', val: 3.8, color: '#e74c3c' },
+                    { label: '★★★★', val: 3.1, color: '#f39c12' },
+                    { label: '★', val: 0.4, color: '#95a5a6' }
+                ],
+                cats: [
+                    { label: '減齡特效', val: 318, max: 318 }, { label: '畫面合成', val: 55, max: 318 },
+                    { label: '火災', val: 29, max: 318 }, { label: '年代修圖', val: 21, max: 318 },
+                    { label: '人群複製', val: 18, max: 318 }, { label: '雨/血/動物/車', val: 31, max: 318 }
+                ]
+            },
+            smooth: {
+                budget: '$13,364,000', shots: '472 顆', avg: '$28,313', note: false,
+                stars: [
+                    { label: '★★', val: 68.6, color: '#2ecc71' },
+                    { label: '★★★', val: 15.5, color: '#3498db' },
+                    { label: '★★★★★', val: 8.3, color: '#e74c3c' },
+                    { label: '★★★★', val: 6.8, color: '#f39c12' },
+                    { label: '★', val: 0.8, color: '#95a5a6' }
+                ],
+                cats: [
+                    { label: '減齡特效', val: 318, max: 318 }, { label: '畫面合成', val: 55, max: 318 },
+                    { label: '火災', val: 29, max: 318 }, { label: '年代修圖', val: 21, max: 318 },
+                    { label: '人群複製', val: 18, max: 318 }, { label: '雨/血/動物/車', val: 31, max: 318 }
+                ]
+            },
+            actor: {
+                budget: '$3,029,000', shots: '154 顆', avg: '$19,668', note: true,
+                stars: [
+                    { label: '★★★', val: 36.7, color: '#3498db' },
+                    { label: '★★', val: 25.8, color: '#2ecc71' },
+                    { label: '★★★★★', val: 19.5, color: '#e74c3c' },
+                    { label: '★★★★', val: 16.1, color: '#f39c12' },
+                    { label: '★', val: 1.9, color: '#95a5a6' }
+                ],
+                cats: [
+                    { label: '減齡特效', val: 0, max: 55, color: '#555' }, { label: '畫面合成', val: 55, max: 55 },
+                    { label: '火災', val: 29, max: 55 }, { label: '年代修圖', val: 21, max: 55 },
+                    { label: '人群複製', val: 18, max: 55 }, { label: '雨/血/動物/車', val: 31, max: 55 }
+                ]
+            }
+        };
+
+        function renderBars(containerId, items, isPercent) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = items.map(item => `
+                <div class="bar-wrapper">
+                    <div class="bar-label">${item.label}</div>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="width: ${isPercent ? item.val : (item.val/item.max*100)}%; background-color: ${item.color || '#3498db'};"></div>
+                    </div>
+                    <div class="bar-percent" style="color: ${item.color || '#3498db'};">${item.val}${isPercent ? '%' : ' 顆'}</div>
+                </div>
+            `).join('');
+        }
+
+        function switchTab(tabKey, btn) {
+            // Reset buttons
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('active');
+                if(b.innerText.includes('演員')) b.style.background = '#e74c3c';
+                else if(b.innerText.includes('清單')) b.style.background = '#8e44ad';
+                else b.style.background = '#333';
+            });
+            
+            // Set active button styling
+            btn.classList.add('active');
+            if(tabKey === 'actor') btn.style.background = '#c0392b';
+            if(tabKey === 'list') btn.style.background = '#732d91';
+
+            // Toggle Views
+            const dashView = document.getElementById('dashboard-view');
+            const tableView = document.getElementById('table-view');
+
+            if(tabKey === 'list') {
+                dashView.classList.add('hidden');
+                tableView.classList.add('active');
+            } else {
+                dashView.classList.remove('hidden');
+                tableView.classList.remove('active');
+                
+                // Update Dashboard Data
+                const d = data[tabKey];
+                document.getElementById('kpi-budget').innerText = d.budget;
+                document.getElementById('kpi-shots').innerText = d.shots;
+                document.getElementById('kpi-avg').innerText = d.avg;
+                
+                if(d.note) document.getElementById('actor-note').classList.add('active');
+                else document.getElementById('actor-note').classList.remove('active');
+
+                renderBars('star-charts', d.stars, true);
+                renderBars('cat-charts', d.cats, false);
+            }
+        }
+
+        // Init
+        renderBars('star-charts', data['heavy'].stars, true);
+        renderBars('cat-charts', data['heavy'].cats, false);
+    </script>
+</body>
+</html>
