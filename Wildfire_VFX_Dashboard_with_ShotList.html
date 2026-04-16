@@ -26,7 +26,7 @@
             padding: 20px; 
             scroll-behavior: smooth;
         }
-        .container { max-width: 1200px; margin: auto; }
+        .container { max-width: 1300px; margin: auto; }
         header { 
             display: flex; 
             justify-content: space-between; 
@@ -73,9 +73,18 @@
             border-radius: 10px; 
             text-align: center; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: relative;
         }
         .kpi-value { font-size: 32px; font-weight: bold; color: var(--accent-green); display: block; margin: 10px 0;}
         .kpi-label { color: #888; font-size: 14px;}
+        
+        .kpi-note {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 10px;
+            line-height: 1.4;
+            display: block;
+        }
 
         /* Standard Panel */
         .standard-panel {
@@ -242,7 +251,7 @@
             flex-direction: column;
         }
         .table-scroll-area {
-            max-height: 600px;
+            max-height: 500px;
             overflow-y: auto;
             overflow-x: auto;
         }
@@ -275,7 +284,7 @@
                 <button class="tab-btn active" onclick="switchTab('heavy', this)" style="background:#3498db; box-shadow:0 4px 15px rgba(52, 152, 219, 0.4); color:white; border-color:rgba(255,255,255,0.8); transform: translateY(-3px);">大幅度減齡方案</button>
                 <button class="tab-btn" onclick="switchTab('smooth', this)">2D磨皮減齡方案</button>
                 <button class="tab-btn" onclick="switchTab('actor', this)">演員方案 (移除減齡)</button>
-                <button class="tab-btn" onclick="switchTab('list', this)">📋 完整鏡頭清單</button>
+                <button class="tab-btn" onclick="switchTab('list', this)">完整鏡頭清單</button>
                 <button class="tab-btn" onclick="switchTab('rules', this)">📝 備註</button>
             </div>
         </header>
@@ -298,6 +307,7 @@
                 <div class="kpi-card">
                     <span class="kpi-label">預估人天</span>
                     <span class="kpi-value" id="kpi-days" style="color:var(--accent-purple);">0 天</span>
+                    <span class="kpi-note">＊註：此人天數為依鏡頭難度折算之『報價基準單位』，僅供預算規模評估使用，非實際製作之日曆時程。</span>
                 </div>
                 <div class="kpi-card">
                     <span class="kpi-label">單顆平均成本</span>
@@ -307,7 +317,7 @@
 
             <div class="standard-panel">
                 <div style="width:100%; margin-bottom:10px;">
-                    <strong>💡 預估人天與計價基準 (每日單價 $6,500)</strong>
+                    <strong>💡 人天評估標準 (每日單價 $6,500)</strong>
                 </div>
                 <span class="std-badge b5">S (特效鏡頭): 10天</span>
                 <span class="std-badge b5">★★★★★ (特效鏡頭): 7天</span>
@@ -315,9 +325,6 @@
                 <span class="std-badge b3">★★★ (特效鏡頭): 3天</span>
                 <span class="std-badge b2">★★ (合成鏡頭): 2天</span>
                 <span class="std-badge b1">★ (合成鏡頭): 1天</span>
-                <div style="width: 100%; margin-top: 10px; font-size: 13px; color: #aaa;">
-                    ＊註：此「預估人天」為依鏡頭難度折算之『報價基準單位』，僅供預算規模評估使用，非實際製作之日曆時程。
-                </div>
             </div>
 
             <div class="chart-grid">
@@ -388,20 +395,24 @@
                         <thead>
                             <tr>
                                 <th style="width: 5%">集數</th>
-                                <th style="width: 10%">特效類別</th>
-                                <th style="width: 20%">場景</th>
-                                <th style="width: 25%">內容</th>
-                                <th style="width: 6%">數量</th>
-                                <th style="width: 18%">等級</th>
-                                <th style="width: 16%">備註</th>
+                                <th style="width: 8%">類別</th>
+                                <th style="width: 12%">場景</th>
+                                <th style="width: 8%">劇中時間</th>
+                                <th style="width: 15%">內容描述</th>
+                                <th style="width: 15%">VFX內容</th>
+                                <th style="width: 5%">數量</th>
+                                <th style="width: 17%">等級</th>
+                                <th style="width: 15%">備註</th>
                             </tr>
                         </thead>
                         <tbody>
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>畫面合成</td>
-            <td>週刊雜誌社 會議室/辦公區</td>
+            <td>週刊雜誌社</td>
+            <td>2026</td>
             <td>白板貼著週刊新封面,同仁鼓勵丁</td>
+            <td>螢幕新聞畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -410,8 +421,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>畫面合成</td>
-            <td>週刊雜誌社 辦公區</td>
+            <td>週刊雜誌社</td>
+            <td>2026</td>
             <td>熙安心睡著,丁發現熙桌面學合照</td>
+            <td>螢幕新聞畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -420,8 +433,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>畫面合成</td>
-            <td>週刊雜誌社 辦公區</td>
+            <td>週刊雜誌社</td>
+            <td>2026</td>
             <td>丁累趴桌面睡著,熙幫蓋衣後離去</td>
+            <td>螢幕新聞畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -430,8 +445,10 @@
         <tr class="shot-row" data-ep="8" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>8</td>
             <td>畫面合成</td>
-            <td>週刊雜誌社 辦公區</td>
+            <td>週刊雜誌社</td>
+            <td>2026</td>
             <td>審查會名單官官相護,熙怒</td>
+            <td>螢幕新聞畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -440,8 +457,10 @@
         <tr class="shot-row" data-ep="10" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>10</td>
             <td>畫面合成</td>
-            <td>週刊雜誌社 辦公區</td>
+            <td>週刊雜誌社</td>
+            <td>2026</td>
             <td>熙要學在股東會反對陽</td>
+            <td>電視螢幕畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -450,8 +469,10 @@
         <tr class="shot-row" data-ep="6" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>6</td>
             <td>畫面合成</td>
-            <td>丁潮湧家 客廳</td>
+            <td>丁潮湧家</td>
+            <td>2026</td>
             <td>雅看著各家新聞報導,現場有丁.熙</td>
+            <td>螢幕新聞畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -460,8 +481,10 @@
         <tr class="shot-row" data-ep="8" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>8</td>
             <td>畫面合成</td>
-            <td>彭莉蓮別墅 </td>
+            <td>彭莉蓮別墅</td>
+            <td>2026</td>
             <td>要學在股東會反對陽</td>
+            <td>電視螢幕畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -470,8 +493,10 @@
         <tr class="shot-row" data-ep="1" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>1</td>
             <td>畫面合成</td>
-            <td>周理行家 客廳</td>
+            <td>周理行家</td>
+            <td>2026</td>
             <td>蔡看新聞得知林亡,著急找熙</td>
+            <td>螢幕新聞畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -480,8 +505,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>畫面合成</td>
-            <td>洪珮如辦公室 0</td>
+            <td>洪珮如辦公室</td>
+            <td>2026</td>
             <td>如靠著椅背微笑</td>
+            <td>電視螢幕畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -490,8 +517,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>畫面合成</td>
-            <td>高德奎家 0</td>
+            <td>高德奎家</td>
+            <td>2026</td>
             <td>高表情陰沈</td>
+            <td>電視螢幕畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -500,8 +529,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>畫面合成</td>
-            <td>醫院 周理行病房:</td>
+            <td>醫院</td>
+            <td>2026</td>
             <td>兩人看著新聞的章記者會</td>
+            <td>電視螢幕畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -510,8 +541,10 @@
         <tr class="shot-row" data-ep="8" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>8</td>
             <td>畫面合成</td>
-            <td>醫院 周理行病房</td>
+            <td>醫院</td>
+            <td>2026</td>
             <td>思從新聞上看到吳照片吃吃驚</td>
+            <td>電視螢幕畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -520,8 +553,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>畫面合成</td>
-            <td>洪炳記者會 10</td>
+            <td>洪炳記者會</td>
+            <td>2026</td>
             <td>陽強調司法迫害,如另開股東會突</td>
+            <td>電視螢幕畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -530,8 +565,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>畫面合成</td>
-            <td>臺鳳翔家 0</td>
+            <td>臺鳳翔家</td>
+            <td>2026</td>
             <td>秦在家中垂頭喪氣</td>
+            <td>電視螢幕畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -540,8 +577,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>畫面合成</td>
-            <td>趙元生家 10</td>
+            <td>趙元生家</td>
+            <td>2026</td>
             <td>趙在家中沈默不語</td>
+            <td>電視螢幕畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -550,8 +589,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>畫面合成</td>
-            <td>小吃店 0</td>
+            <td>小吃店</td>
+            <td>2026</td>
             <td>塚笑容詭異</td>
+            <td>電視螢幕畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -560,8 +601,10 @@
         <tr class="shot-row" data-ep="4" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>4</td>
             <td>畫面合成</td>
-            <td>各種螢幕空間 0</td>
+            <td>各種螢幕空間</td>
+            <td>2026</td>
             <td>新聞報導虹昶集團案件</td>
+            <td>各種螢幕合成</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -570,8 +613,10 @@
         <tr class="shot-row" data-ep="9" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>9</td>
             <td>畫面合成</td>
-            <td>大街小巷 電視螢幕</td>
+            <td>大街小巷</td>
+            <td>2026</td>
             <td>不同的新聞畫面播報章緋聞</td>
+            <td>電視畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -580,8 +625,10 @@
         <tr class="shot-row" data-ep="10" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>10</td>
             <td>畫面合成</td>
-            <td>招待所 0</td>
+            <td>招待所</td>
+            <td>2016</td>
             <td>高赤裸上身與兩位女子親密</td>
+            <td>影幕合成</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -590,8 +637,10 @@
         <tr class="shot-row" data-ep="9" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>9</td>
             <td>畫面合成</td>
-            <td>醫院 樓梯</td>
+            <td>醫院</td>
+            <td>2026</td>
             <td>看著行車紀錄器影像</td>
+            <td>行車記錄器影像</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -600,8 +649,10 @@
         <tr class="shot-row" data-ep="9" data-level="★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>9</td>
             <td>畫面合成</td>
-            <td>周理行家 火災後恩熙房-整理</td>
+            <td>周理行家</td>
+            <td>2026</td>
             <td>熙看著股東會直播.臉色陰沈</td>
+            <td>虹昶股東會畫面</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -610,8 +661,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>9</td>
             <td>畫面合成</td>
-            <td>周理行家 火災後恩熙房-整理</td>
+            <td>周理行家</td>
+            <td>2026</td>
             <td>熙網路直播控訴司法不公</td>
+            <td>流量數據/留言</td>
             <td>2</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -620,8 +673,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>3</td>
             <td>畫面合成</td>
-            <td>彭莉蓮別墅 暗房</td>
+            <td>彭莉蓮別墅</td>
+            <td>2026</td>
             <td>學教熙沖洗底片,兩人雙手碰觸接吻</td>
+            <td>底片顯影照片</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -630,8 +685,10 @@
         <tr class="shot-row" data-ep="2" data-level="★★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>2</td>
             <td>畫面合成</td>
-            <td>國家圖書館 縮圖室</td>
+            <td>國家圖書館</td>
+            <td>2026</td>
             <td>兩人查詢曹死的相關報導</td>
+            <td>縮圖資料</td>
             <td>2</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -640,8 +697,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="2">
             <td>4</td>
             <td>畫面合成</td>
-            <td>國家圖書館 縮圖室</td>
+            <td>國家圖書館</td>
+            <td>2026</td>
             <td>丁專心看著各種舊時的報章雜誌</td>
+            <td>縮圖資料</td>
             <td>2</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -650,8 +709,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★" data-cat="畫面合成" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>畫面合成</td>
-            <td>立法院 場</td>
+            <td>立法院</td>
+            <td>2026</td>
             <td>高走進議場,眾家媒體拍照</td>
+            <td>螢幕合成</td>
             <td>3</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -660,8 +721,10 @@
         <tr class="shot-row" data-ep="1" data-level="★★★★" data-cat="火災" data-remark="0205特效需求表" data-count="3">
             <td>1</td>
             <td>火災</td>
-            <td>台北街道 火災現場1</td>
+            <td>台北街道</td>
+            <td>2026</td>
             <td>恩熙遇火場,初遇Andy</td>
+            <td>火災</td>
             <td>3</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -670,8 +733,10 @@
         <tr class="shot-row" data-ep="1" data-level="★★★" data-cat="火災" data-remark="0205特效需求表" data-count="3">
             <td>1</td>
             <td>火災</td>
-            <td>台北街道 火災現場1</td>
+            <td>台北街道</td>
+            <td>2026</td>
             <td>恩熙抱貓屍,學關心</td>
+            <td>火災後</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -680,8 +745,10 @@
         <tr class="shot-row" data-ep="1" data-level="★★★" data-cat="火災" data-remark="0205特效需求表" data-count="3">
             <td>1</td>
             <td>火災</td>
-            <td>台北街道 火災現場1</td>
+            <td>台北街道</td>
+            <td>2026</td>
             <td>學送恩熙當時在火場照片</td>
+            <td>火災後燒焦</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -690,8 +757,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★★★" data-cat="火災" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>火災</td>
-            <td>台北街道 火災現場2-大樓</td>
+            <td>台北街道</td>
+            <td>2026</td>
             <td>大樓陷火海,人員逃竄,熙看著火星</td>
+            <td>火災</td>
             <td>3</td>
             <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -700,8 +769,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="火災" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>火災</td>
-            <td>周理行家 火災現場3</td>
+            <td>周理行家</td>
+            <td>2026</td>
             <td>思看見家火燒理急救中,崩潰大叫</td>
+            <td>火災</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -710,8 +781,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="火災" data-remark="0205特效需求表" data-count="2">
             <td>6</td>
             <td>火災</td>
-            <td>周理行家 火災現場3</td>
+            <td>周理行家</td>
+            <td>2026</td>
             <td>思望著火災,一切都沒了</td>
+            <td>火災</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -720,8 +793,10 @@
         <tr class="shot-row" data-ep="7" data-level="★★★" data-cat="火災" data-remark="0205特效需求表" data-count="3">
             <td>7</td>
             <td>火災</td>
-            <td>周理行家 火災現場3-災後樓下</td>
+            <td>周理行家</td>
+            <td>2026</td>
             <td>熙望上火災後的家,神情哀傷</td>
+            <td>火災後</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -730,8 +805,10 @@
         <tr class="shot-row" data-ep="7" data-level="★★★" data-cat="火災" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>火災</td>
-            <td>周理行家 火災現場3-災後樓下</td>
+            <td>周理行家</td>
+            <td>2026</td>
             <td>吳望著火災後周家</td>
+            <td>火災後</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -740,8 +817,10 @@
         <tr class="shot-row" data-ep="7" data-level="★★★" data-cat="火災" data-remark="0205特效需求表" data-count="3">
             <td>7</td>
             <td>火災</td>
-            <td>周理行家 火災現場3-災後樓下</td>
+            <td>周理行家</td>
+            <td>2026</td>
             <td>熙走進火災後的家</td>
+            <td>火災後</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -750,8 +829,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★★★" data-cat="火災" data-remark="0205特效需求表" data-count="2">
             <td>9</td>
             <td>火災</td>
-            <td>郊區平房 0</td>
+            <td>郊區平房</td>
+            <td>2026</td>
             <td>大火吞噬平房,昌的屍體被燒</td>
+            <td>大火</td>
             <td>2</td>
             <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -760,8 +841,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★★★" data-cat="火災" data-remark="0205特效需求表" data-count="2">
             <td>9</td>
             <td>火災</td>
-            <td>郊區平房 0</td>
+            <td>郊區平房</td>
+            <td>2026</td>
             <td>平房被大火吞噬</td>
+            <td>大火</td>
             <td>2</td>
             <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -770,8 +853,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★" data-cat="雨/血" data-remark="0205特效需求表" data-count="2">
             <td>10</td>
             <td>雨/血</td>
-            <td>市郊廢棄公寓 0</td>
+            <td>市郊廢棄公寓</td>
+            <td>2006</td>
             <td>陽掐住齊脖子</td>
+            <td></td>
             <td>2</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -780,8 +865,10 @@
         <tr class="shot-row" data-ep="8" data-level="★★" data-cat="雨/血" data-remark="0205特效需求表" data-count="2">
             <td>8</td>
             <td>雨/血</td>
-            <td>曹以齊境 0</td>
+            <td>曹以齊境</td>
+            <td>2026</td>
             <td>大雨中熙撐傘墳前,手中的花吹歪</td>
+            <td>下雨</td>
             <td>2</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -790,8 +877,10 @@
         <tr class="shot-row" data-ep="8" data-level="★★★" data-cat="雨/血" data-remark="0205特效需求表" data-count="2">
             <td>8</td>
             <td>雨/血</td>
-            <td>虹昶集團 董事長辦公室</td>
+            <td>虹昶集團</td>
+            <td>2026</td>
             <td>塚將扁鑽刺進昌脖子</td>
+            <td>噴血</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -800,8 +889,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★" data-cat="雨/血" data-remark="0205特效需求表" data-count="2">
             <td>10</td>
             <td>雨/血</td>
-            <td>療養院 洪炳陽房</td>
+            <td>療養院</td>
+            <td>2026</td>
             <td>陽狹持蓮用刀傷,學抱母痛哭</td>
+            <td>血</td>
             <td>2</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -810,8 +901,10 @@
         <tr class="shot-row" data-ep="9" data-level="★" data-cat="雨/血" data-remark="0205特效需求表" data-count="2">
             <td>9</td>
             <td>雨/血</td>
-            <td>彭莉蓮別墅 0</td>
+            <td>彭莉蓮別墅</td>
+            <td>2026</td>
             <td>陽眼中充滿血絲</td>
+            <td>眼中血絲</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -820,8 +913,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★" data-cat="飛機/鳥 /蜘蛛" data-remark="0205特效需求表" data-count="1">
             <td>9</td>
             <td>飛機/鳥 /蜘蛛</td>
-            <td>虹昶集團 股東會迴廊</td>
+            <td>虹昶集團</td>
+            <td>2026</td>
             <td>學望著天空,牽起萍的手</td>
+            <td>天空飛機</td>
             <td>1</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -830,8 +925,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★" data-cat="飛機/鳥 /蜘蛛" data-remark="0205特效需求表" data-count="1">
             <td>9</td>
             <td>飛機/鳥 /蜘蛛</td>
-            <td>彭莉蓮別墅 庭院</td>
+            <td>彭莉蓮別墅</td>
+            <td>2026</td>
             <td>熙與學躺在草地上望天</td>
+            <td>天空飛機</td>
             <td>1</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -840,8 +937,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★" data-cat="飛機/鳥 /蜘蛛" data-remark="0205特效需求表" data-count="1">
             <td>4</td>
             <td>飛機/鳥 /蜘蛛</td>
-            <td>高級會館 洪珮如房</td>
+            <td>高級會館</td>
+            <td>2026</td>
             <td>如倚靠窗邊品酒</td>
+            <td>黑鳶飛過</td>
             <td>1</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -850,8 +949,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★★" data-cat="飛機/鳥 /蜘蛛" data-remark="0205特效需求表" data-count="1">
             <td>5</td>
             <td>飛機/鳥 /蜘蛛</td>
-            <td>洪珮如辦公室 0</td>
+            <td>洪珮如辦公室</td>
+            <td>2026</td>
             <td>賀報告珍要將股權移轉給昌</td>
+            <td>黑寡婦蜘蛛-吃蟲</td>
             <td>1</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -860,8 +961,10 @@
         <tr class="shot-row" data-ep="8" data-level="★★★★" data-cat="飛機/鳥 /蜘蛛" data-remark="0205特效需求表" data-count="1">
             <td>8</td>
             <td>飛機/鳥 /蜘蛛</td>
-            <td>洪珮如辦公室 0</td>
+            <td>洪珮如辦公室</td>
+            <td>2026</td>
             <td>如要奪回屬於她的,兩人一同合作</td>
+            <td>黑寡婦蜘蛛</td>
             <td>1</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -870,8 +973,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★★" data-cat="飛機/鳥 /蜘蛛" data-remark="0205特效需求表" data-count="1">
             <td>9</td>
             <td>飛機/鳥 /蜘蛛</td>
-            <td>洪珮如辦公室 0</td>
+            <td>洪珮如辦公室</td>
+            <td>2026</td>
             <td>熙詢問陽知不知道珍與蓮的緋聞</td>
+            <td>黑寡婦蜘蛛</td>
             <td>1</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -880,8 +985,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★★" data-cat="群眾" data-remark="0205特效需求表" data-count="2">
             <td>9</td>
             <td>群眾</td>
-            <td>虹昶集團 股東會</td>
+            <td>虹昶集團</td>
+            <td>2026</td>
             <td>股東會上陽勝利當選</td>
+            <td>人群/股東會投影畫面</td>
             <td>2</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -890,8 +997,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★★" data-cat="群眾" data-remark="0205特效需求表" data-count="2">
             <td>10</td>
             <td>群眾</td>
-            <td>虹昶集團 臨時股東會</td>
+            <td>虹昶集團</td>
+            <td>2026</td>
             <td>虹昶集團重新選舉董監事,萍摟學</td>
+            <td>人群</td>
             <td>2</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -900,8 +1009,10 @@
         <tr class="shot-row" data-ep="7" data-level="★★★★" data-cat="群眾" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>群眾</td>
-            <td>台南棒球場 0</td>
+            <td>台南棒球場</td>
+            <td>2026</td>
             <td>高快步走在人群中</td>
+            <td>棒球場比賽/人群</td>
             <td>2</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -910,8 +1021,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="群眾" data-remark="0205特效需求表" data-count="2">
             <td>3</td>
             <td>群眾</td>
-            <td>台南棒球場 貴賓室</td>
+            <td>台南棒球場</td>
+            <td>2026</td>
             <td>秦有信心說服章扣押保險箱證據</td>
+            <td>棒球場比賽人群</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -920,8 +1033,10 @@
         <tr class="shot-row" data-ep="7" data-level="★★★" data-cat="群眾" data-remark="0205特效需求表" data-count="2">
             <td>7</td>
             <td>群眾</td>
-            <td>台南棒球場 貴賓室</td>
+            <td>台南棒球場</td>
+            <td>2026</td>
             <td>陽稱金流保密,眾人都在同條船</td>
+            <td>棒球場比賽/人群</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -930,8 +1045,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="群眾" data-remark="0205特效需求表" data-count="2">
             <td>3</td>
             <td>群眾</td>
-            <td>表演廳 廳內</td>
+            <td>表演廳</td>
+            <td>1999</td>
             <td>思在台上演奏,曹入迷</td>
+            <td>演奏廳人群</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -940,8 +1057,10 @@
         <tr class="shot-row" data-ep="2" data-level="★★★" data-cat="群眾" data-remark="0205特效需求表" data-count="2">
             <td>2</td>
             <td>群眾</td>
-            <td>臺南飯店宴席廳 0</td>
+            <td>臺南飯店宴席廳</td>
+            <td>2026</td>
             <td>陽宴請警友會/警察/檢調</td>
+            <td>na</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -950,8 +1069,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="群眾" data-remark="0205特效需求表" data-count="2">
             <td>3</td>
             <td>群眾</td>
-            <td>婚宴餐廳 0</td>
+            <td>婚宴餐廳</td>
+            <td>2000</td>
             <td>曹思婚宴,逐桌敬酒</td>
+            <td>婚宴人群</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -960,8 +1081,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="群眾" data-remark="0205特效需求表" data-count="2">
             <td>10</td>
             <td>群眾</td>
-            <td>洪成珍靈堂 0</td>
+            <td>洪成珍靈堂</td>
+            <td>2026</td>
             <td>熙在靈堂上宣告握有陽的秘密</td>
+            <td>靈堂/靈堂人群</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -970,8 +1093,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★★★" data-cat="車禍" data-remark="0205特效需求表" data-count="2">
             <td>5</td>
             <td>車禍</td>
-            <td>僻靜的蜿蜒小路 劉芳菲車上</td>
+            <td>僻靜的蜿蜒小路</td>
+            <td>2026</td>
             <td>被後車逼車,菲車撞上山壁</td>
+            <td>na</td>
             <td>2</td>
             <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -980,8 +1105,10 @@
         <tr class="shot-row" data-ep="8" data-level="★★★★★" data-cat="車禍" data-remark="0205特效需求表" data-count="2">
             <td>8</td>
             <td>車禍</td>
-            <td>台北街頭 0</td>
+            <td>台北街頭</td>
+            <td>2026</td>
             <td>丁在街道狂飆,搶黃燈被攔腰撞上</td>
+            <td>撞車</td>
             <td>2</td>
             <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -990,8 +1117,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★★★" data-cat="車禍" data-remark="0205特效需求表" data-count="2">
             <td>10</td>
             <td>車禍</td>
-            <td>市郊廢棄公寓-街道 廢棄公寓外街道</td>
+            <td>市郊廢棄公寓-街道</td>
+            <td>2006</td>
             <td>陽追撞車,陽跪下求原諒,撲倒齊</td>
+            <td>撞車</td>
             <td>2</td>
             <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1000,8 +1129,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★★★" data-cat="車禍" data-remark="0205特效需求表" data-count="2">
             <td>10</td>
             <td>車禍</td>
-            <td>立法院 大門/街道</td>
+            <td>立法院</td>
+            <td>2026</td>
             <td>高跑到馬路差點被車撞,一身狼狽</td>
+            <td>車子急剎車</td>
             <td>2</td>
             <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1010,8 +1141,10 @@
         <tr class="shot-row" data-ep="2" data-level="★★★" data-cat="年代修圖" data-remark="0205特效需求表" data-count="3">
             <td>2</td>
             <td>年代修圖</td>
-            <td>市郊廢棄公寓 戶外</td>
+            <td>市郊廢棄公寓</td>
+            <td>2006</td>
             <td>曹疑車內自殺,丁拍照見疑點</td>
+            <td>20年後狀態, 特效輔助</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1020,8 +1153,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="年代修圖" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>年代修圖</td>
-            <td>普通公寓 原廢棄公寓</td>
+            <td>普通公寓</td>
+            <td>2026</td>
             <td>熙回憶起他記得父親</td>
+            <td>年代轉換</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1030,8 +1165,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★" data-cat="年代修圖" data-remark="0205特效需求表" data-count="2">
             <td>3</td>
             <td>年代修圖</td>
-            <td>湯姆熊遊樂場 0</td>
+            <td>湯姆熊遊樂場</td>
+            <td>1999</td>
             <td>曹與林在遊樂場對決電玩</td>
+            <td>街上招牌修圖</td>
             <td>2</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1040,8 +1177,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★" data-cat="年代修圖" data-remark="0205特效需求表" data-count="3">
             <td>9</td>
             <td>年代修圖</td>
-            <td>丁潮湧車 郊區道路</td>
+            <td>丁潮湧車</td>
+            <td>2026</td>
             <td>丁快車前往平房,見遠方火光</td>
+            <td>遠方濃煙/火光</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1050,8 +1189,10 @@
         <tr class="shot-row" data-ep="1" data-level="★" data-cat="新聞主播台" data-remark="0205特效需求表" data-count="1">
             <td>1</td>
             <td>新聞主播台</td>
-            <td>新聞主播台 0</td>
+            <td>新聞主播台</td>
+            <td>2026</td>
             <td>主播播報林司法過勞</td>
+            <td>新聞畫面合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1060,8 +1201,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="新聞主播台" data-remark="0205特效需求表" data-count="1">
             <td>7</td>
             <td>新聞主播台</td>
-            <td>新聞主播台: 0</td>
+            <td>新聞主播台:</td>
+            <td>2026</td>
             <td>主播播報虹昶集團被授</td>
+            <td>新聞畫面合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1070,8 +1213,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="新聞主播台" data-remark="0205特效需求表" data-count="1">
             <td>7</td>
             <td>新聞主播台</td>
-            <td>新聞主播台A 10</td>
+            <td>新聞主播台A</td>
+            <td>2026</td>
             <td>主播播報檢調突襲台南派出所</td>
+            <td>新聞畫面合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1080,8 +1225,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="新聞主播台" data-remark="0205特效需求表" data-count="1">
             <td>7</td>
             <td>新聞主播台</td>
-            <td>新聞主播台B 0</td>
+            <td>新聞主播台B</td>
+            <td>2026</td>
             <td>主播播報洪炳陽捲炒股/賄賂疑雲</td>
+            <td>新聞畫面合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1090,8 +1237,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="新聞主播台" data-remark="0205特效需求表" data-count="1">
             <td>7</td>
             <td>新聞主播台</td>
-            <td>新聞主播台C 10</td>
+            <td>新聞主播台C</td>
+            <td>2026</td>
             <td>主播播報陽勞役作弊</td>
+            <td>新聞畫面合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1100,8 +1249,10 @@
         <tr class="shot-row" data-ep="7" data-level="★" data-cat="新聞主播台" data-remark="0205特效需求表" data-count="1">
             <td>7</td>
             <td>新聞主播台</td>
-            <td>新聞主播台D 0</td>
+            <td>新聞主播台D</td>
+            <td>2026</td>
             <td>主播播報 能否公正處理陽</td>
+            <td>新聞畫面合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1110,8 +1261,10 @@
         <tr class="shot-row" data-ep="8" data-level="★" data-cat="新聞主播台" data-remark="0205特效需求表" data-count="1">
             <td>8</td>
             <td>新聞主播台</td>
-            <td>新聞主播台 10</td>
+            <td>新聞主播台</td>
+            <td>2026</td>
             <td>電視新聞播報吳死</td>
+            <td>新聞畫面合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1120,8 +1273,10 @@
         <tr class="shot-row" data-ep="10" data-level="★" data-cat="新聞主播台" data-remark="0205特效需求表" data-count="2">
             <td>10</td>
             <td>新聞主播台</td>
-            <td>新聞主播 主播台</td>
+            <td>新聞主播</td>
+            <td>2026</td>
             <td>播報司法醜聞,</td>
+            <td>新聞畫面合成</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1130,8 +1285,10 @@
         <tr class="shot-row" data-ep="10" data-level="★" data-cat="新聞主播台" data-remark="0205特效需求表" data-count="1">
             <td>10</td>
             <td>新聞主播台</td>
-            <td>新聞主播 主播台</td>
+            <td>新聞主播</td>
+            <td>2026</td>
             <td>主播播報司法高官認罪</td>
+            <td>新聞畫面合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1140,8 +1297,10 @@
         <tr class="shot-row" data-ep="2" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>2</td>
             <td>減齡特效</td>
-            <td>地檢署 檢察官辦公室</td>
+            <td>地檢署</td>
+            <td>2018</td>
             <td>聽到林 泣聲,兩人聊起初表</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1150,8 +1309,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>招待所 10</td>
+            <td>招待所</td>
+            <td>2016</td>
             <td>高赤裸上身與兩位女子親密</td>
+            <td>減齡/影幕合成</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1160,8 +1321,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>周理行家 餐廳</td>
+            <td>周理行家</td>
+            <td>2013</td>
             <td>周回憶從舊鋼琴找出照片</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1170,8 +1333,10 @@
         <tr class="shot-row" data-ep="2" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>2</td>
             <td>減齡特效</td>
-            <td>周理行家 家門口</td>
+            <td>周理行家</td>
+            <td>2007</td>
             <td>思帶熙沿路敲門找工作</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1180,8 +1345,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>曹以齊家 客廳</td>
+            <td>曹以齊家</td>
+            <td>2006</td>
             <td>曹向思說已找到證據,思低頭,曹憤恨</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1190,8 +1357,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>以齊家 客廳</td>
+            <td>以齊家</td>
+            <td>2006</td>
             <td>多家銀行借錢給陽, 贏了陽就會倒</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1200,8 +1369,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>曹以齊家 客廳</td>
+            <td>曹以齊家</td>
+            <td>2006</td>
             <td>思不想再被陷害,希望曹放棄</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1210,8 +1381,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>曹以齊家 書房</td>
+            <td>曹以齊家</td>
+            <td>2006</td>
             <td>翻閱卷宗找資料</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1220,8 +1393,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>老鄰居 門口</td>
+            <td>老鄰居</td>
+            <td>2006</td>
             <td>鄰居訴說曹家搬離,調查局搜查</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1230,8 +1405,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>虹昶集團 董事長辦公室</td>
+            <td>虹昶集團</td>
+            <td>2006</td>
             <td>珍要曹放棄上訴,曹要挑戰珍正道</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1240,8 +1417,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>虹昶集團 董事長辦公室</td>
+            <td>虹昶集團</td>
+            <td>2006</td>
             <td>陽跪著,珍拿卷宗猛敲陽</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1250,8 +1429,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>虹昶集團 室外停車場</td>
+            <td>虹昶集團</td>
+            <td>2006</td>
             <td>曹與如相會,如帶往見父</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1260,8 +1441,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>虹昶集團 中庭花園</td>
+            <td>虹昶集團</td>
+            <td>2006</td>
             <td>如在耳邊低語吳軒輝一事,如燦笑</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1270,8 +1453,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>虹集團 外街道</td>
+            <td>虹集團</td>
+            <td>2006</td>
             <td>齊跟蹤,拍到珍與蓮共乘</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1280,8 +1465,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>虹集團 外街道</td>
+            <td>虹集團</td>
+            <td>2006</td>
             <td>發現在跟拍</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1290,8 +1477,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>洪宝 洪成珍書房</td>
+            <td>洪宝</td>
+            <td>2006</td>
             <td>蓮懷疑齊有發現她和珍秘密</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1300,8 +1489,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>飯店 飯店房間</td>
+            <td>飯店</td>
+            <td>2006</td>
             <td>陽看台北夜景想著被父打,蓮安慰</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1310,8 +1501,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>飯店 飯店房間</td>
+            <td>飯店</td>
+            <td>2006</td>
             <td>蓮擔心陽</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1320,8 +1513,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>飯店 飯店房間</td>
+            <td>飯店</td>
+            <td>2006</td>
             <td>陽電話告知蓮他殺了齊</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1330,8 +1525,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>飯店 飯店門口</td>
+            <td>飯店</td>
+            <td>2006</td>
             <td>坐上吳車</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1340,8 +1537,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>高爾夫球場 球場</td>
+            <td>高爾夫球場</td>
+            <td>2006</td>
             <td>曹躲樹 ,錄下司法權責一同打球</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1350,8 +1549,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>市郊廢棄公寓 戶外</td>
+            <td>市郊廢棄公寓</td>
+            <td>2006</td>
             <td>陽拖著曹的屍體進車內</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1360,8 +1561,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>市郊廢棄公寓 10</td>
+            <td>市郊廢棄公寓</td>
+            <td>2006</td>
             <td>陽掐住齊脖子</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1370,8 +1573,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>市郊廢棄公寓 戶外</td>
+            <td>市郊廢棄公寓</td>
+            <td>2006</td>
             <td>陽掐死,跑回車上打電話</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1380,8 +1585,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>市郊廢棄公寓 戶外</td>
+            <td>市郊廢棄公寓</td>
+            <td>2006</td>
             <td>蓮佈置自殺現場,齊突抓蓮手</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1390,8 +1597,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>市郊廢棄公寓-街道 廢棄公寓外街道</td>
+            <td>市郊廢棄公寓-街道</td>
+            <td>2006</td>
             <td>陽追撞車,陽跪下求原諒,撲倒</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1400,8 +1609,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>湯姆熊遊樂場 0</td>
+            <td>湯姆熊遊樂場</td>
+            <td>2006</td>
             <td>曹交給林一筆錢給熙,並說找到證據</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1410,8 +1621,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>便利商店 10</td>
+            <td>便利商店</td>
+            <td>2006</td>
             <td>鄭拿吳的金流資料給曹</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1420,8 +1633,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>公園涼亭 0</td>
+            <td>公園涼亭</td>
+            <td>2006</td>
             <td>思不原諒林,但希望林幫曹</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1430,8 +1645,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>公園涼亭 10</td>
+            <td>公園涼亭</td>
+            <td>2006</td>
             <td>思要林勸曹</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1440,8 +1657,10 @@
         <tr class="shot-row" data-ep="8" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>8</td>
             <td>減齡特效</td>
-            <td>海灘 0</td>
+            <td>海灘</td>
+            <td>2006</td>
             <td>曹一家人在海灘上玩,有人溺水</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1450,8 +1669,10 @@
         <tr class="shot-row" data-ep="8" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>8</td>
             <td>減齡特效</td>
-            <td>海灘 10</td>
+            <td>海灘</td>
+            <td>2006</td>
             <td>曹游上岸,救了一件外套,思氣哭</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1460,8 +1681,10 @@
         <tr class="shot-row" data-ep="8" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>8</td>
             <td>減齡特效</td>
-            <td>海灘 營火堆</td>
+            <td>海灘</td>
+            <td>2006</td>
             <td>曹看著家人,他不想告陽了</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1470,8 +1693,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>海灘 帳內外</td>
+            <td>海灘</td>
+            <td>2006</td>
             <td>齊與思在營火前,思支持齊提告</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1480,8 +1705,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>挫冰店 10</td>
+            <td>挫冰店</td>
+            <td>2006</td>
             <td>林吃剉冰,闆娘戲問高中小女友呢</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1490,8 +1717,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>台北街道 圖書館外街道</td>
+            <td>台北街道</td>
+            <td>2006</td>
             <td>齊從圖書館走出,陽開車跟蹤</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1500,8 +1729,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>地檢署 走龍</td>
+            <td>地檢署</td>
+            <td>2004</td>
             <td>林不滿曹說謊,快步離去</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1510,8 +1741,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>地檢署 偵查庭</td>
+            <td>地檢署</td>
+            <td>2004</td>
             <td>林在被告席,曹眼神悲傷</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1520,8 +1753,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>地檢署 偵查庭</td>
+            <td>地檢署</td>
+            <td>2004</td>
             <td>曹說謊林當天聚會沒有喝酒</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1530,8 +1765,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>台南地檢署 偵查庭</td>
+            <td>台南地檢署</td>
+            <td>2004</td>
             <td>秦偵訊軒並起訴</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1540,8 +1777,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>台南地檢署 偵查庭</td>
+            <td>台南地檢署</td>
+            <td>2004</td>
             <td>秦偵訊曹</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1550,8 +1789,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>地方法院 走廊</td>
+            <td>地方法院</td>
+            <td>2004</td>
             <td>走廊上, 曹狼狽不願屈服,陽大笑離去</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1560,8 +1801,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>地方法院 走廊</td>
+            <td>地方法院</td>
+            <td>2004</td>
             <td>陽與手下經過, 曹一人無助</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1570,8 +1813,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>地方法院 法庭</td>
+            <td>地方法院</td>
+            <td>2004</td>
             <td>侃侃而談,法官宣判,曹判偽造文書</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1580,8 +1825,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>地方法院 法庭</td>
+            <td>地方法院</td>
+            <td>2004</td>
             <td>軒頂罪,曹質疑是勾串,陽露出笑意</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1590,8 +1837,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>地方法院 法庭</td>
+            <td>地方法院</td>
+            <td>2004</td>
             <td>陽控曹偽造定存單,賣不認罪</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1600,8 +1849,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>地方法院 法庭</td>
+            <td>地方法院</td>
+            <td>2004</td>
             <td>定存單被質疑,鄭彪卸責曹,林不安</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1610,8 +1861,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>地方法院 法庭</td>
+            <td>地方法院</td>
+            <td>2004</td>
             <td>銀行副總走向證人席</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1620,8 +1873,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>地方法院 法庭</td>
+            <td>地方法院</td>
+            <td>2004</td>
             <td>副總指曹影響銀行信譽,曹被背叛</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1630,8 +1885,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>地方法院 法庭</td>
+            <td>地方法院</td>
+            <td>2004</td>
             <td>軒頂罪,曹質疑是勾串,陽露出笑意</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1640,8 +1897,10 @@
         <tr class="shot-row" data-ep="8" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>8</td>
             <td>減齡特效</td>
-            <td>地方法院 法庭</td>
+            <td>地方法院</td>
+            <td>2004</td>
             <td>方鴻財審判曹案</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1650,8 +1909,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>地方法院 刑事法庭</td>
+            <td>地方法院</td>
+            <td>2004</td>
             <td>陽在法庭上原諒軒</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1660,8 +1921,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>以齊家 客廳/門口</td>
+            <td>以齊家</td>
+            <td>2004</td>
             <td>林透露要去考司法考</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1670,8 +1933,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>曹以齊家 客廳/門口</td>
+            <td>曹以齊家</td>
+            <td>2004</td>
             <td>曹與思目送林離開</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1680,8 +1945,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>以齊家 樓下</td>
+            <td>以齊家</td>
+            <td>2004</td>
             <td>林酒醉稍退,決定騎車回家</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1690,8 +1957,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>曹以齊家 0</td>
+            <td>曹以齊家</td>
+            <td>2004</td>
             <td>抓周,曹深情紀錄</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1700,8 +1969,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>虹昶集團 工廠角落</td>
+            <td>虹昶集團</td>
+            <td>2004</td>
             <td>陽找軒來頂罪</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1710,8 +1981,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>彭莉蓮別墅 花園</td>
+            <td>彭莉蓮別墅</td>
+            <td>2004</td>
             <td>陽看著花園發呆,蓮從後環抱</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1720,8 +1993,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>彭莉蓮別墅 客廳</td>
+            <td>彭莉蓮別墅</td>
+            <td>2004</td>
             <td>蓮拉起陽起舞,洪無聲哭了蓮安慰</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1730,8 +2005,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>9</td>
             <td>減齡特效</td>
-            <td>彭莉蓮別墅 外/大門/客廳</td>
+            <td>彭莉蓮別墅</td>
+            <td>2004</td>
             <td>珍去別墅探望學</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1740,8 +2017,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>9</td>
             <td>減齡特效</td>
-            <td>彭莉蓮別墅 外街道</td>
+            <td>彭莉蓮別墅</td>
+            <td>2004</td>
             <td>珍慈愛看著學,手放上蓮大腿上</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1750,8 +2029,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>高爾夫球場 球場/陽傘休息區</td>
+            <td>高爾夫球場</td>
+            <td>2004</td>
             <td>陽要大家幫忙處理金雀案</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1760,8 +2041,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>高爾夫球場 陽傘休息區</td>
+            <td>高爾夫球場</td>
+            <td>2004</td>
             <td>高提議找人頂罪</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1770,8 +2053,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>高爾夫球場 陽傘休息區</td>
+            <td>高爾夫球場</td>
+            <td>2004</td>
             <td>彪建議可以對曹提起告訴</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1780,8 +2065,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>高爾夫球場 陽傘休息區</td>
+            <td>高爾夫球場</td>
+            <td>2004</td>
             <td>彪建議金管會可以向銀行施壓</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1790,8 +2077,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>高爾夫球場 球場</td>
+            <td>高爾夫球場</td>
+            <td>2004</td>
             <td>秦建議趙用匿名檢舉,使曹被調查</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1800,8 +2089,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>台南棒球場 貴賓包廂</td>
+            <td>台南棒球場</td>
+            <td>2004</td>
             <td>na</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1810,8 +2101,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>金銀行 會議室</td>
+            <td>金銀行</td>
+            <td>2004</td>
             <td>帳目被金管會查核, 趙威脅賀偽造</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1820,8 +2113,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>金銀行 會議室</td>
+            <td>金銀行</td>
+            <td>2004</td>
             <td>調查局查帳務資料, 在旁陪笑</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1830,8 +2125,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>金金銀行 會議室</td>
+            <td>金金銀行</td>
+            <td>2004</td>
             <td>金管會向銀行高層施壓</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1840,8 +2137,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>金錢銀行 辦公區</td>
+            <td>金錢銀行</td>
+            <td>2004</td>
             <td>曹收拾座位物品,神情落寞</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1850,8 +2149,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>金金銀行 大門</td>
+            <td>金金銀行</td>
+            <td>2004</td>
             <td>兩人無語問蒼天</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1860,8 +2161,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>6</td>
             <td>減齡特效</td>
-            <td>飯店 餐廳</td>
+            <td>飯店</td>
+            <td>2004</td>
             <td>陽宴請司法權貴</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1870,8 +2173,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>虹昶集團 舊廠辦交誼廳</td>
+            <td>虹昶集團</td>
+            <td>2004</td>
             <td>蓮與陽兩人在工廠結婚跳舞</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1880,8 +2185,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>日本料理店 10</td>
+            <td>日本料理店</td>
+            <td>2004</td>
             <td>酒後林向楠透露無擔保定存單一事</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1890,8 +2197,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>5</td>
             <td>減齡特效</td>
-            <td>台北街道 巷弄</td>
+            <td>台北街道</td>
+            <td>2004</td>
             <td>林酒逃逸</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1900,8 +2209,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>各種出遊畫面 各種場景</td>
+            <td>各種出遊畫面</td>
+            <td>2004</td>
             <td>一家人各種出遊畫面</td>
+            <td>減齡/DV畫質合成</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1910,8 +2221,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>派出所 0</td>
+            <td>派出所</td>
+            <td>2004</td>
             <td>警詢問軒,製作筆錄</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1920,8 +2233,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>地方法院 簡易法庭</td>
+            <td>地方法院</td>
+            <td>2003</td>
             <td>曹與陽法庭爭辦,陽口吃</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1930,8 +2245,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>以齊家 餐廳/客廳/廚房</td>
+            <td>以齊家</td>
+            <td>2003</td>
             <td>三人吃火鍋,林建議定存單擔保</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1940,8 +2257,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>10</td>
             <td>減齡特效</td>
-            <td>曹以齊家 客廳</td>
+            <td>曹以齊家</td>
+            <td>2003</td>
             <td>思大肚子優雅彈琴,齊抱熙唱歌</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1950,8 +2269,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>曹以齊家 臥室</td>
+            <td>曹以齊家</td>
+            <td>2003</td>
             <td>曹DV拍攝熟睡的愛女,與妻相吻</td>
+            <td>減齡/DV畫質合成</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1960,8 +2281,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>虹昶集團 會議室</td>
+            <td>虹昶集團</td>
+            <td>2003</td>
             <td>曹陽債務協商,曹傷陽自尊</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1970,8 +2293,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>4</td>
             <td>減齡特效</td>
-            <td>虹昶集團 董事長辦公室</td>
+            <td>虹昶集團</td>
+            <td>2003</td>
             <td>珍看公司財報,拿鞋去陽</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1980,8 +2305,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>金銀行 副總辦公室</td>
+            <td>金銀行</td>
+            <td>2003</td>
             <td>曹示警虹集團有債務風險</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -1990,8 +2317,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>婚宴餐廳 0</td>
+            <td>婚宴餐廳</td>
+            <td>2000</td>
             <td>曹思婚宴,逐桌敬酒</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2000,8 +2329,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>婚宴餐廳 新人休息室</td>
+            <td>婚宴餐廳</td>
+            <td>2000</td>
             <td>曹酒醉,謝林將思介紹給他</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2010,8 +2341,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>婚宴餐廳 門口</td>
+            <td>婚宴餐廳</td>
+            <td>2000</td>
             <td>林送兩人上車,一人獨走</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2020,8 +2353,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>金銀行 副總辦公室</td>
+            <td>金銀行</td>
+            <td>1999</td>
             <td>曹爭論卡價欲離職,副總將其調</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2030,8 +2365,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>表演廳 剪票口</td>
+            <td>表演廳</td>
+            <td>1999</td>
             <td>兩人整理儀態走向剪票口</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2040,8 +2377,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>表演廳 廳內</td>
+            <td>表演廳</td>
+            <td>1999</td>
             <td>思在台上演奏,曹入迷</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2050,8 +2389,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>表演廳 廳內</td>
+            <td>表演廳</td>
+            <td>1999</td>
             <td>散場後,曹感動落淚</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2060,8 +2401,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>迪斯可舞廳 舞池</td>
+            <td>迪斯可舞廳</td>
+            <td>1999</td>
             <td>曹思在舞池跳舞,曹聊著未來夢想</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2070,8 +2413,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>湯姆熊遊樂場 10</td>
+            <td>湯姆熊遊樂場</td>
+            <td>1999</td>
             <td>曹與林在遊樂場對決電玩</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2080,8 +2425,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效/血" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效/血</td>
-            <td>老婦人家 客廳</td>
+            <td>老婦人家</td>
+            <td>1999</td>
             <td>法院查封老婦屋,婦割腕曹驚</td>
+            <td>減齡/血</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2090,8 +2437,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效/年代修圖" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效/年代修圖</td>
-            <td>夜市 小吃攤</td>
+            <td>夜市</td>
+            <td>1999</td>
             <td>三人一同開心吃宵夜</td>
+            <td>減齡/1999夜市修圖</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2100,8 +2449,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效/年代修圖" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效/年代修圖</td>
-            <td>台北街頭 101外街道</td>
+            <td>台北街頭</td>
+            <td>1999</td>
             <td>曹在101外從容上計程車</td>
+            <td>減齡/1999台北街景修圖</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2110,8 +2461,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效/年代修圖" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效/年代修圖</td>
-            <td>台北街頭 10</td>
+            <td>台北街頭</td>
+            <td>1999</td>
             <td>兩人喝酒在街上狂奔</td>
+            <td>減齡/1999台北街景修圖</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2120,8 +2473,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效/年代修圖" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效/年代修圖</td>
-            <td>台北街頭 0</td>
+            <td>台北街頭</td>
+            <td>1999</td>
             <td>與林上計程車,思獨走回家</td>
+            <td>減齡/1999台北街景修圖</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2130,8 +2485,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>3</td>
             <td>減齡特效</td>
-            <td>台北街頭 巷弄</td>
+            <td>台北街頭</td>
+            <td>1999</td>
             <td>曹讚思的演奏,心生情愫</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2140,8 +2497,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>9</td>
             <td>減齡特效</td>
-            <td>彭莉蓮別墅 庭院</td>
+            <td>彭莉蓮別墅</td>
+            <td>1998</td>
             <td>陽抱著珍在庭院跳舞</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2150,8 +2509,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>9</td>
             <td>減齡特效</td>
-            <td>醫院 產房</td>
+            <td>醫院</td>
+            <td>1998</td>
             <td>蓮痛苦的生產,陽抱小孩微笑</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2160,8 +2521,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>9</td>
             <td>減齡特效</td>
-            <td>虹昶集團 董事長辦公室</td>
+            <td>虹昶集團</td>
+            <td>1997</td>
             <td>珍將蓮安排陽身旁做秘書</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2170,8 +2533,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★" data-cat="減齡特效" data-remark="0205特效需求表" data-count="3">
             <td>9</td>
             <td>減齡特效</td>
-            <td>洪成珍車上 0</td>
+            <td>洪成珍車上</td>
+            <td>1997</td>
             <td>珍將手放在蓮的腿上</td>
+            <td>減齡</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0205特效需求表</td>
@@ -2180,8 +2545,10 @@
         <tr class="shot-row" data-ep="1" data-level="★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>1</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>恩熙與林偉業的遺產討論訊息</td>
+            <td>UI介面</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2190,8 +2557,10 @@
         <tr class="shot-row" data-ep="1" data-level="★" data-cat="新聞畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>1</td>
             <td>新聞畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>地檢署背景的選舉政治新聞</td>
+            <td>新聞畫面合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2200,8 +2569,10 @@
         <tr class="shot-row" data-ep="1" data-level="★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="3">
             <td>1</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>偵查庭中的 CCTV 截圖/影像播放</td>
+            <td>UI介面</td>
             <td>3</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2210,8 +2581,10 @@
         <tr class="shot-row" data-ep="1" data-level="★" data-cat="減齡特效" data-remark="0416夢想評估新增" data-count="1">
             <td>1</td>
             <td>減齡特效</td>
-            <td> </td>
+            <td></td>
+            <td>2004</td>
             <td>年輕的曹以齊與蔡思玲抱著恩熙的照片</td>
+            <td>減齡</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2220,8 +2593,10 @@
         <tr class="shot-row" data-ep="1" data-level="★★★★" data-cat="群眾" data-remark="0416夢想評估新增" data-count="3">
             <td>1</td>
             <td>群眾</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>火災現場圍觀民眾人潮</td>
+            <td>群眾</td>
             <td>3</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2230,8 +2605,10 @@
         <tr class="shot-row" data-ep="1" data-level="★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>1</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>丁潮湧在公車站使用的手機介面</td>
+            <td>UI介面</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2240,8 +2617,10 @@
         <tr class="shot-row" data-ep="2" data-level="★★" data-cat="雨/血" data-remark="0416夢想評估新增" data-count="3">
             <td>2</td>
             <td>雨/血</td>
-            <td> </td>
+            <td></td>
+            <td>2007</td>
             <td>蔡思玲初遇周理行的颱風大雨</td>
+            <td>雨水</td>
             <td>3</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2250,8 +2629,10 @@
         <tr class="shot-row" data-ep="3" data-level="★" data-cat="減齡特效" data-remark="0416夢想評估新增" data-count="1">
             <td>3</td>
             <td>減齡特效</td>
-            <td> </td>
+            <td></td>
+            <td>2006</td>
             <td>鄰居陳伯伯夫婦抱著小恩熙的照片</td>
+            <td>鄰居老夫婦2006年樣貌減齡處理</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2260,8 +2641,10 @@
         <tr class="shot-row" data-ep="3" data-level="★★★★" data-cat="群眾" data-remark="0416夢想評估新增" data-count="3">
             <td>3</td>
             <td>群眾</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>獨立樂團表演 Live House 聽眾</td>
+            <td>複製人群營造擁擠感與空間隔絕感</td>
             <td>3</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2270,8 +2653,10 @@
         <tr class="shot-row" data-ep="3" data-level="★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>3</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>丁潮湧搜尋趙元生身分介面</td>
+            <td>電腦螢幕 UI 與資料照片合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2280,8 +2665,10 @@
         <tr class="shot-row" data-ep="4" data-level="★" data-cat="新聞畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>4</td>
             <td>新聞畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>虹昶集團財務危機新聞報導</td>
+            <td>製作主播導言與相關新聞畫面</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2290,8 +2677,10 @@
         <tr class="shot-row" data-ep="4" data-level="★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>4</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2003</td>
             <td>簡易法庭開庭內部</td>
+            <td>移除現代螢幕，改為2003年CRT螢幕感</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2300,8 +2689,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★★" data-cat="群眾" data-remark="0416夢想評估新增" data-count="3">
             <td>4</td>
             <td>群眾</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>洪炳陽記者會大批媒體</td>
+            <td>複製記者群與相機群，營造壓力感</td>
             <td>3</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2310,8 +2701,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★★" data-cat="群眾" data-remark="0416夢想評估新增" data-count="3">
             <td>4</td>
             <td>群眾</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>洪珮如記者會閃光燈與記者</td>
+            <td>大量記者群與閃光燈特效合成</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2320,8 +2713,10 @@
         <tr class="shot-row" data-ep="4" data-level="★★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="2">
             <td>4</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2004</td>
             <td>虹昶工廠角落</td>
+            <td>移除現代安全標示、監視器與工業設備</td>
             <td>2</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2330,8 +2725,10 @@
         <tr class="shot-row" data-ep="4" data-level="★" data-cat="減齡特效" data-remark="0416夢想評估新增" data-count="1">
             <td>4</td>
             <td>減齡特效</td>
-            <td> </td>
+            <td></td>
+            <td>2003</td>
             <td>曹以齊一家三口全家福照片</td>
+            <td>2003年靜態照片高精度減齡修圖</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2340,8 +2737,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★★★" data-cat="車禍" data-remark="0416夢想評估新增" data-count="3">
             <td>5</td>
             <td>車禍</td>
-            <td> </td>
+            <td></td>
+            <td>2004</td>
             <td>林偉業機車撞擊路邊車輛</td>
+            <td>還原2004年台北夜間街景並合成車輛撞擊物理特效</td>
             <td>3</td>
             <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2350,8 +2749,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="雨/血" data-remark="0416夢想評估新增" data-count="1">
             <td>5</td>
             <td>雨/血</td>
-            <td> </td>
+            <td></td>
+            <td>2004</td>
             <td>林偉業車禍手部血跡</td>
+            <td>手部血跡特效處理</td>
             <td>1</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2360,8 +2761,10 @@
         <tr class="shot-row" data-ep="5" data-level="★★★" data-cat="減齡特效" data-remark="0416夢想評估新增" data-count="2">
             <td>5</td>
             <td>減齡特效</td>
-            <td> </td>
+            <td></td>
+            <td>2004</td>
             <td>章婉瑜與陳亦庭青少年/大學時期</td>
+            <td>18歲青澀感減齡，強化階級差異視覺</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2370,8 +2773,10 @@
         <tr class="shot-row" data-ep="6" data-level="★★" data-cat="火災" data-remark="0416夢想評估新增" data-count="1">
             <td>6</td>
             <td>火災</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>周理行家縱火起火點</td>
+            <td>室內初期燃燒畫面與起火點 VFX 輔助</td>
             <td>1</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2380,8 +2785,10 @@
         <tr class="shot-row" data-ep="6" data-level="★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>6</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>偽造的 Tinder/IG 帳號介面</td>
+            <td>手機通訊介面與 AI 偽造照片合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2390,8 +2797,10 @@
         <tr class="shot-row" data-ep="7" data-level="★★★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>7</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>破碎手機螢幕及其桌布變換</td>
+            <td>手機玻璃破碎感與桌布影像替換合成</td>
             <td>1</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2400,8 +2809,10 @@
         <tr class="shot-row" data-ep="7" data-level="★★★★" data-cat="群眾" data-remark="0416夢想評估新增" data-count="3">
             <td>7</td>
             <td>群眾</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>地檢署大型結案記者會</td>
+            <td>複製眾多媒體記者以營造肅殺之氣</td>
             <td>3</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2410,8 +2821,10 @@
         <tr class="shot-row" data-ep="8" data-level="★★★★" data-cat="群眾" data-remark="0416夢想評估新增" data-count="3">
             <td>8</td>
             <td>群眾</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>虹昶集團大門老員工抗爭</td>
+            <td>加強包圍車輛的抗議人潮規模</td>
             <td>3</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2420,8 +2833,10 @@
         <tr class="shot-row" data-ep="8" data-level="★★★" data-cat="雨/血" data-remark="0416夢想評估新增" data-count="2">
             <td>8</td>
             <td>雨/血</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>吳軒輝受虐及死後大量積血</td>
+            <td>虐殺血跡與流乾後的乾涸血場景特效</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2430,8 +2845,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★" data-cat="減齡特效" data-remark="0416夢想評估新增" data-count="2">
             <td>9</td>
             <td>減齡特效</td>
-            <td> </td>
+            <td></td>
+            <td>2004</td>
             <td>洪成珍與彭莉蓮在車內</td>
+            <td>洪成珍減齡至67歲，彭莉蓮減齡至31歲</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2440,8 +2857,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★" data-cat="火災" data-remark="0416夢想評估新增" data-count="1">
             <td>9</td>
             <td>火災</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>郊區道路遠處火光和濃煙</td>
+            <td>遠景火光與濃煙合成</td>
             <td>1</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2450,8 +2869,10 @@
         <tr class="shot-row" data-ep="9" data-level="★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>9</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>洪炳陽向恩熙展示手機新聞</td>
+            <td>手機螢幕即時新聞標題介面合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2460,8 +2881,10 @@
         <tr class="shot-row" data-ep="9" data-level="★" data-cat="車禍" data-remark="0416夢想評估新增" data-count="1">
             <td>9</td>
             <td>車禍</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>陳亦庭大貨車碰撞瞬間（視訊視角）</td>
+            <td>模擬視訊畫面震盪與車內碰撞合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2470,8 +2893,10 @@
         <tr class="shot-row" data-ep="9" data-level="★" data-cat="新聞畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>9</td>
             <td>新聞畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>章婉瑜私生活醜聞新聞快報</td>
+            <td>加強專業主播播報特寫與畫面合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2480,8 +2905,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★★" data-cat="車禍" data-remark="0416夢想評估新增" data-count="1">
             <td>9</td>
             <td>車禍</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>丁潮湧高速逼車與輪胎爆裂打滑</td>
+            <td>高速動態、輪胎爆氣與打滑數位合成</td>
             <td>1</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2490,8 +2917,10 @@
         <tr class="shot-row" data-ep="9" data-level="★★" data-cat="血 / 火" data-remark="0416夢想評估新增" data-count="1">
             <td>9</td>
             <td>血 / 火</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>丁潮湧遭猛刺噴血與槍口火光</td>
+            <td>噴血效果、地面積血及槍口火光 (Muzzle Flash)</td>
             <td>1</td>
             <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2500,8 +2929,10 @@
         <tr class="shot-row" data-ep="9" data-level="★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>9</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>手機 GPS 定位追蹤畫面</td>
+            <td>手機地圖 UI 與移動光點合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2510,8 +2941,10 @@
         <tr class="shot-row" data-ep="10" data-level="★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="1">
             <td>10</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>磁碟機密碼輸入與解鎖介面</td>
+            <td>電腦螢幕 UI 與密碼對話框合成</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2520,8 +2953,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★★" data-cat="群眾" data-remark="0416夢想評估新增" data-count="2">
             <td>10</td>
             <td>群眾</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>立法院議場審查會</td>
+            <td>複製立委人群填補議場席位</td>
             <td>2</td>
             <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2530,8 +2965,10 @@
         <tr class="shot-row" data-ep="10" data-level="★" data-cat="減齡特效" data-remark="0416夢想評估新增" data-count="1">
             <td>10</td>
             <td>減齡特效</td>
-            <td> </td>
+            <td></td>
+            <td>2003</td>
             <td>曹以齊與蔡思玲的舊影像</td>
+            <td>2003-2005年期間照片或 DV 畫面減齡修圖</td>
             <td>1</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2540,8 +2977,10 @@
         <tr class="shot-row" data-ep="10" data-level="★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="2">
             <td>10</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>電腦播放 8 釐米光碟內容</td>
+            <td>螢幕播放關鍵影片（含1997年回憶畫面）合成</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2550,8 +2989,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="雨/血" data-remark="0416夢想評估新增" data-count="2">
             <td>10</td>
             <td>雨/血</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>洪家學手敲玻璃滲血與血印</td>
+            <td>車窗玻璃上的血手印與皮膚出血合成</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2560,8 +3001,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="2">
             <td>10</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2006</td>
             <td>圖書館外及追撞道路街景</td>
+            <td>還原2006年道路標線、路牌及建築廣告</td>
             <td>2</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2570,8 +3013,10 @@
         <tr class="shot-row" data-ep="10" data-level="★★★" data-cat="雨/血" data-remark="0416夢想評估新增" data-count="3">
             <td>10</td>
             <td>雨/血</td>
-            <td> </td>
+            <td></td>
+            <td>2006</td>
             <td>命案現場雨勢加劇與泥濘氛圍</td>
+            <td>加強雨勢環境特效與地面泥濘感</td>
             <td>3</td>
             <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2580,8 +3025,10 @@
         <tr class="shot-row" data-ep="10" data-level="★" data-cat="火災" data-remark="0416夢想評估新增" data-count="2">
             <td>10</td>
             <td>火災</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>燒照片的火桶</td>
+            <td>火桶內真實火光、煙霧與火星散落特效</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2590,8 +3037,10 @@
         <tr class="shot-row" data-ep="10" data-level="★" data-cat="畫面合成" data-remark="0416夢想評估新增" data-count="2">
             <td>10</td>
             <td>畫面合成</td>
-            <td> </td>
+            <td></td>
+            <td>2026</td>
             <td>22年後曹以齊案無罪確定判決新聞</td>
+            <td>製作結案大結局之主播視角與新聞畫面合成</td>
             <td>2</td>
             <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
             <td>0416夢想評估新增</td>
@@ -2647,9 +3096,9 @@
 
     <script>
         const data = {
-            heavy: {"budget": "$9,964,500", "shots": "529 顆", "days": "1,533 天", "avg": "$18,836", "pieLabels": ["★★★★★", "★★★★", "★★★", "★★", "★"], "pieData": [8.2, 9.5, 73.8, 3.4, 5.2], "pieColors": ["#e74c3c", "#f39c12", "#3498db", "#2ecc71", "#95a5a6"], "starCounts": [{"label": "★★★★★ (特效鏡頭)", "count": 18, "color": "#e74c3c"}, {"label": "★★★★ (特效鏡頭)", "count": 29, "color": "#f39c12"}, {"label": "★★★ (特效鏡頭)", "count": 377, "color": "#3498db"}, {"label": "★★ (合成鏡頭)", "count": 26, "color": "#2ecc71"}, {"label": "★ (合成鏡頭)", "count": 79, "color": "#95a5a6"}], "cats": [{"label": "減齡特效", "val": 305, "max": 305}, {"label": "畫面合成", "val": 73, "max": 305}, {"label": "群眾", "val": 38, "max": 305}, {"label": "火災", "val": 33, "max": 305}, {"label": "雨/血", "val": 21, "max": 305}, {"label": "車禍", "val": 13, "max": 305}, {"label": "減齡特效/年代修圖", "val": 12, "max": 305}, {"label": "年代修圖", "val": 11, "max": 305}, {"label": "新聞主播台", "val": 10, "max": 305}, {"label": "飛機/鳥 /蜘蛛", "val": 6, "max": 305}, {"label": "減齡特效/血", "val": 3, "max": 305}, {"label": "新聞畫面合成", "val": 3, "max": 305}, {"label": "血 / 火", "val": 1, "max": 305}], "note": false},
-            smooth: {"budget": "$7,936,500", "shots": "529 顆", "days": "1,221 天", "avg": "$15,003", "pieLabels": ["★★★★★", "★★★★", "★★★", "★★", "★"], "pieData": [10.3, 11.9, 15.0, 56.7, 6.1], "pieColors": ["#e74c3c", "#f39c12", "#3498db", "#2ecc71", "#95a5a6"], "starCounts": [{"label": "★★★★★ (特效鏡頭)", "count": 18, "color": "#e74c3c"}, {"label": "★★★★ (特效鏡頭)", "count": 29, "color": "#f39c12"}, {"label": "★★★ (特效鏡頭)", "count": 61, "color": "#3498db"}, {"label": "★★ (合成鏡頭)", "count": 346, "color": "#2ecc71"}, {"label": "★ (合成鏡頭)", "count": 75, "color": "#95a5a6"}], "cats": [{"label": "減齡特效", "val": 305, "max": 305}, {"label": "畫面合成", "val": 73, "max": 305}, {"label": "群眾", "val": 38, "max": 305}, {"label": "火災", "val": 33, "max": 305}, {"label": "雨/血", "val": 21, "max": 305}, {"label": "車禍", "val": 13, "max": 305}, {"label": "減齡特效/年代修圖", "val": 12, "max": 305}, {"label": "年代修圖", "val": 11, "max": 305}, {"label": "新聞主播台", "val": 10, "max": 305}, {"label": "飛機/鳥 /蜘蛛", "val": 6, "max": 305}, {"label": "減齡特效/血", "val": 3, "max": 305}, {"label": "新聞畫面合成", "val": 3, "max": 305}, {"label": "血 / 火", "val": 1, "max": 305}], "note": false},
-            actor: {"budget": "$3,776,500", "shots": "209 顆", "days": "581 天", "avg": "$18,069", "pieLabels": ["★★★★★", "★★★★", "★★★", "★★", "★"], "pieData": [21.7, 25.0, 31.5, 9.0, 12.9], "pieColors": ["#e74c3c", "#f39c12", "#3498db", "#2ecc71", "#95a5a6"], "starCounts": [{"label": "★★★★★ (特效鏡頭)", "count": 18, "color": "#e74c3c"}, {"label": "★★★★ (特效鏡頭)", "count": 29, "color": "#f39c12"}, {"label": "★★★ (特效鏡頭)", "count": 61, "color": "#3498db"}, {"label": "★★ (合成鏡頭)", "count": 26, "color": "#2ecc71"}, {"label": "★ (合成鏡頭)", "count": 75, "color": "#95a5a6"}], "cats": [{"label": "畫面合成", "val": 73, "max": 73}, {"label": "群眾", "val": 38, "max": 73}, {"label": "火災", "val": 33, "max": 73}, {"label": "雨/血", "val": 21, "max": 73}, {"label": "車禍", "val": 13, "max": 73}, {"label": "年代修圖", "val": 11, "max": 73}, {"label": "新聞主播台", "val": 10, "max": 73}, {"label": "飛機/鳥 /蜘蛛", "val": 6, "max": 73}, {"label": "新聞畫面合成", "val": 3, "max": 73}, {"label": "血 / 火", "val": 1, "max": 73}, {"label": "減齡特效", "val": 0, "max": 73}], "note": true}
+            heavy: {"budget": "$9,964,500", "shots": "529 顆", "days": "1,533", "avg": "$18,836", "pieLabels": ["★★★★★", "★★★★", "★★★", "★★", "★"], "pieData": [8.2, 9.5, 73.8, 3.4, 5.2], "pieColors": ["#e74c3c", "#f39c12", "#3498db", "#2ecc71", "#95a5a6"], "starCounts": [{"label": "★★★★★ (特效鏡頭)", "count": 18, "color": "#e74c3c"}, {"label": "★★★★ (特效鏡頭)", "count": 29, "color": "#f39c12"}, {"label": "★★★ (特效鏡頭)", "count": 377, "color": "#3498db"}, {"label": "★★ (合成鏡頭)", "count": 26, "color": "#2ecc71"}, {"label": "★ (合成鏡頭)", "count": 79, "color": "#95a5a6"}], "cats": [{"label": "減齡特效", "val": 305, "max": 305}, {"label": "畫面合成", "val": 73, "max": 305}, {"label": "群眾", "val": 38, "max": 305}, {"label": "火災", "val": 33, "max": 305}, {"label": "雨/血", "val": 21, "max": 305}, {"label": "車禍", "val": 13, "max": 305}, {"label": "減齡特效/年代修圖", "val": 12, "max": 305}, {"label": "年代修圖", "val": 11, "max": 305}, {"label": "新聞主播台", "val": 10, "max": 305}, {"label": "飛機/鳥 /蜘蛛", "val": 6, "max": 305}, {"label": "減齡特效/血", "val": 3, "max": 305}, {"label": "新聞畫面合成", "val": 3, "max": 305}, {"label": "血 / 火", "val": 1, "max": 305}], "note": false},
+            smooth: {"budget": "$7,936,500", "shots": "529 顆", "days": "1,221", "avg": "$15,003", "pieLabels": ["★★★★★", "★★★★", "★★★", "★★", "★"], "pieData": [10.3, 11.9, 15.0, 56.7, 6.1], "pieColors": ["#e74c3c", "#f39c12", "#3498db", "#2ecc71", "#95a5a6"], "starCounts": [{"label": "★★★★★ (特效鏡頭)", "count": 18, "color": "#e74c3c"}, {"label": "★★★★ (特效鏡頭)", "count": 29, "color": "#f39c12"}, {"label": "★★★ (特效鏡頭)", "count": 61, "color": "#3498db"}, {"label": "★★ (合成鏡頭)", "count": 346, "color": "#2ecc71"}, {"label": "★ (合成鏡頭)", "count": 75, "color": "#95a5a6"}], "cats": [{"label": "減齡特效", "val": 305, "max": 305}, {"label": "畫面合成", "val": 73, "max": 305}, {"label": "群眾", "val": 38, "max": 305}, {"label": "火災", "val": 33, "max": 305}, {"label": "雨/血", "val": 21, "max": 305}, {"label": "車禍", "val": 13, "max": 305}, {"label": "減齡特效/年代修圖", "val": 12, "max": 305}, {"label": "年代修圖", "val": 11, "max": 305}, {"label": "新聞主播台", "val": 10, "max": 305}, {"label": "飛機/鳥 /蜘蛛", "val": 6, "max": 305}, {"label": "減齡特效/血", "val": 3, "max": 305}, {"label": "新聞畫面合成", "val": 3, "max": 305}, {"label": "血 / 火", "val": 1, "max": 305}], "note": false},
+            actor: {"budget": "$3,776,500", "shots": "209 顆", "days": "581", "avg": "$18,069", "pieLabels": ["★★★★★", "★★★★", "★★★", "★★", "★"], "pieData": [21.7, 25.0, 31.5, 9.0, 12.9], "pieColors": ["#e74c3c", "#f39c12", "#3498db", "#2ecc71", "#95a5a6"], "starCounts": [{"label": "★★★★★ (特效鏡頭)", "count": 18, "color": "#e74c3c"}, {"label": "★★★★ (特效鏡頭)", "count": 29, "color": "#f39c12"}, {"label": "★★★ (特效鏡頭)", "count": 61, "color": "#3498db"}, {"label": "★★ (合成鏡頭)", "count": 26, "color": "#2ecc71"}, {"label": "★ (合成鏡頭)", "count": 75, "color": "#95a5a6"}], "cats": [{"label": "畫面合成", "val": 73, "max": 73}, {"label": "群眾", "val": 38, "max": 73}, {"label": "火災", "val": 33, "max": 73}, {"label": "雨/血", "val": 21, "max": 73}, {"label": "車禍", "val": 13, "max": 73}, {"label": "年代修圖", "val": 11, "max": 73}, {"label": "新聞主播台", "val": 10, "max": 73}, {"label": "飛機/鳥 /蜘蛛", "val": 6, "max": 73}, {"label": "新聞畫面合成", "val": 3, "max": 73}, {"label": "血 / 火", "val": 1, "max": 73}, {"label": "減齡特效", "val": 0, "max": 73}], "note": true}
         };
 
         Chart.register(ChartDataLabels);
@@ -2772,7 +3221,10 @@
                 const d = data[tabKey];
                 document.getElementById('kpi-budget').innerText = d.budget;
                 document.getElementById('kpi-shots').innerText = d.shots;
-                document.getElementById('kpi-days').innerText = d.days;
+                
+                // Keep the '天' but format it dynamically
+                document.getElementById('kpi-days').innerText = d.days + ' 天';
+                
                 document.getElementById('kpi-avg').innerText = d.avg;
                 
                 if(d.note) document.getElementById('actor-note').classList.add('active');
