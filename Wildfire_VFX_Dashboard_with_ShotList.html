@@ -167,6 +167,22 @@
         .filter-group { display: flex; align-items: center; gap: 10px; }
         select { padding: 8px; border-radius: 4px; background: #444; color: white; border: 1px solid #555; outline: none; }
         
+        /* Dynamic List Summary Panel */
+        .list-summary-panel {
+            background: rgba(243, 156, 18, 0.1);
+            border: 1px solid rgba(243, 156, 18, 0.3);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        .list-summary-panel .sum-title { font-size: 15px; color: #aaa; }
+        .list-summary-panel .sum-value { font-size: 22px; font-weight: bold; }
+        .list-summary-panel .sum-value.blue { color: var(--accent-blue); }
+        .list-summary-panel .sum-value.orange { color: var(--accent-orange); }
+
         .table-outer-card {
             background: var(--card-bg);
             border-radius: 10px;
@@ -229,7 +245,7 @@
                     <span class="kpi-value" id="kpi-shots" style="color:var(--accent-blue);">472 顆</span>
                 </div>
                 <div class="kpi-card">
-                    <span class="kpi-label">預估人天</span>
+                    <span class="kpi-label">預估工期 (人天)</span>
                     <span class="kpi-value" id="kpi-days" style="color:var(--accent-purple);">1,420 天</span>
                 </div>
                 <div class="kpi-card">
@@ -239,13 +255,13 @@
             </div>
 
             <div class="standard-panel">
-                <strong> 人天評估標準 (每日單價 $6,500)</strong>
-                <span class="std-badge b5">S: 10天</span>
-                <span class="std-badge b5">★★★★★: 7天</span>
-                <span class="std-badge b4">★★★★: 5天</span>
-                <span class="std-badge b3">★★★: 3天</span>
-                <span class="std-badge b2">★★: 2天</span>
-                <span class="std-badge b1">★: 1天</span>
+                <strong>💡 人天評估標準 (每日單價 $6,500)</strong>
+                <span class="std-badge b5">S (特效鏡頭): 10天</span>
+                <span class="std-badge b5">★★★★★ (特效鏡頭): 7天</span>
+                <span class="std-badge b4">★★★★ (特效鏡頭): 5天</span>
+                <span class="std-badge b3">★★★ (特效鏡頭): 3天</span>
+                <span class="std-badge b2">★★ (合成鏡頭): 2天</span>
+                <span class="std-badge b1">★ (合成鏡頭): 1天</span>
             </div>
 
             <div class="chart-grid">
@@ -284,9 +300,16 @@
                 <div class="filter-group">
                     <label>⭐ 等級篩選：</label>
                     <select id="filter-star" onchange="filterTable()">
-                        <option value='all'>所有等級</option><option value='★★★★★'>★★★★★</option><option value='★★★★'>★★★★</option><option value='★★★'>★★★</option><option value='★★'>★★</option><option value='★'>★</option>
+                        <option value='all'>所有等級</option><option value='★★★★★'>★★★★★ (特效鏡頭)</option><option value='★★★★'>★★★★ (特效鏡頭)</option><option value='★★★'>★★★ (特效鏡頭)</option><option value='★★'>★★ (合成鏡頭)</option><option value='★'>★ (合成鏡頭)</option>
                     </select>
                 </div>
+            </div>
+
+            <!-- Dynamic List Summary -->
+            <div class="list-summary-panel">
+                <div class="sum-title">🎯 當前篩選結果：</div>
+                <div>總計鏡頭 <span class="sum-value blue" id="filtered-shots-count">0</span> 顆</div>
+                <div>預估總金額 <span class="sum-value orange" id="filtered-total-cost">$0</span></div>
             </div>
             
             <div class="table-outer-card">
@@ -295,1843 +318,1843 @@
                         <thead>
                             <tr>
                                 <th style="width: 12%">特效類別</th>
-                                <th style="width: 15%">大場景</th>
-                                <th style="width: 15%">小場景</th>
-                                <th style="width: 10%">劇中時間</th>
+                                <th style="width: 13%">大場景</th>
+                                <th style="width: 13%">小場景</th>
+                                <th style="width: 9%">劇中時間</th>
                                 <th style="width: 25%">內容</th>
-                                <th style="width: 8%">數量</th>
-                                <th style="width: 15%">等級</th>
+                                <th style="width: 6%">數量</th>
+                                <th style="width: 22%">等級</th>
                             </tr>
                         </thead>
                         <tbody>
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>週刊雜誌社</td>
             <td>會議室/辦公區</td>
             <td>2026</td>
             <td>白板貼著週刊新封面,同仁鼓勵丁</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>週刊雜誌社</td>
             <td>辦公區</td>
             <td>2026</td>
             <td>安心睡著,丁發現熊桌面學合照</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>週刊雜誌社</td>
             <td>辦公區</td>
             <td>2026</td>
             <td>丁累趴桌面睡著, 幫蓋衣後離去</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>週刊雜誌社</td>
             <td>辦公區</td>
             <td>2026</td>
             <td>審查會名單官官相護,</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>週刊雜誌社</td>
             <td>辦公區</td>
             <td>2026</td>
             <td>丁收拾資料,不想再報導</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>丁潮湧家</td>
             <td>客廳</td>
             <td>2026</td>
             <td>雅看著各家新聞報導,現場有丁</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>彭莉蓮別墅</td>
             <td></td>
             <td>2026</td>
             <td>要學在股東會反對陽</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>周理行家</td>
             <td>客廳</td>
             <td>2026</td>
             <td>蔡看新聞得知林亡,著急找照</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>洪珮如辦公室</td>
             <td>0</td>
             <td>2026</td>
             <td>如靠著椅背微笑</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>高德奎家</td>
             <td>0</td>
             <td>2026</td>
             <td>高表情陰沈</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>醫院</td>
             <td>周理行病房:</td>
             <td>2026</td>
             <td>兩人看著新聞的 記者會</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>醫院</td>
             <td>周理行病房</td>
             <td>2026</td>
             <td>思從新聞上看到吳照片吃吃驚</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>洪炳記者會</td>
             <td>10</td>
             <td>2026</td>
             <td>陽強調司法迫害,如另開股東會突襲</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>臺鳳翔家</td>
             <td>0</td>
             <td>2026</td>
             <td>在家中垂頭喪氣</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>趙元生家</td>
             <td>10</td>
             <td>2026</td>
             <td>趙在家中沈默不語</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>小吃店</td>
             <td>0</td>
             <td>2026</td>
             <td>塚笑容詭異</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>各種螢幕空間</td>
             <td>0</td>
             <td>2026</td>
             <td>新聞報導虹昶集團案件</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>大街小巷</td>
             <td>電視螢幕</td>
             <td>2026</td>
             <td>不同的新聞畫面播報章排</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2016" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2016" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>招待所</td>
             <td>0</td>
             <td>2016</td>
             <td>高赤裸上身與兩位女子親密</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2004" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>各種出遊畫面</td>
             <td>各種場景</td>
             <td>2004</td>
             <td>一家人各種出遊畫面</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>醫院</td>
             <td>樓梯</td>
             <td>2026</td>
             <td>看著行車紀錄器影像</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>周理行家</td>
             <td>火災後恩熙房-整理</td>
             <td>2026</td>
             <td>熙看著股東會直播,臉色陰沈</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>周理行家</td>
             <td>火災後恩熙房-整理</td>
             <td>2026</td>
             <td>網路直播控訴司法不公</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>彭莉蓮別墅</td>
             <td>暗房</td>
             <td>2026</td>
             <td>學教 沖洗底片,兩人雙手碰觸接吻</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>國家圖書館</td>
             <td>縮圖室</td>
             <td>2026</td>
             <td>兩人查詢曹死的相關報導</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="2">
             <td>畫面合成</td>
             <td>國家圖書館</td>
             <td>縮圖室</td>
             <td>2026</td>
             <td>丁專心看著各種舊時的報章雜誌</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="畫面合成" data-count="3">
             <td>畫面合成</td>
             <td>立法院</td>
             <td>場</td>
             <td>2026</td>
             <td>高走進議場,眾家媒體拍照</td>
             <td>3</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="火災">
+        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="火災" data-count="3">
             <td>火災</td>
             <td>台北街道</td>
             <td>火災現場1</td>
             <td>2026</td>
             <td>恩熙遇火場,初遇Andy</td>
             <td>3</td>
-            <td><span class="badge badge-4">★★★★</span></td>
+            <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災" data-count="3">
             <td>火災</td>
             <td>台北街道</td>
             <td>火災現場1</td>
             <td>2026</td>
             <td>恩熙抱貓屍,學關心</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災" data-count="3">
             <td>火災</td>
             <td>台北街道</td>
             <td>火災現場1</td>
             <td>2026</td>
             <td>學送 當時在火場照片</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★★" data-cat="火災">
+        <tr class="shot-row" data-time="2026" data-level="★★★★★" data-cat="火災" data-count="3">
             <td>火災</td>
             <td>台北街道</td>
             <td>火災現場2-大樓</td>
             <td>2026</td>
             <td>大樓陷火海,人員逃竄,熙看著火星</td>
             <td>3</td>
-            <td><span class="badge badge-5">★★★★★</span></td>
+            <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="火災">
+        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="火災" data-count="3">
             <td>火災</td>
             <td>周理行家</td>
             <td>火災現場3</td>
             <td>2026</td>
             <td>看見家火燒理急救中,崩潰大叫</td>
             <td>3</td>
-            <td><span class="badge badge-4">★★★★</span></td>
+            <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災" data-count="2">
             <td>火災</td>
             <td>周理行家</td>
             <td>火災現場3</td>
             <td>2026</td>
             <td>思望著火災,一切都沒了</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災" data-count="3">
             <td>火災</td>
             <td>周理行家</td>
             <td>火災現場3-災後樓下</td>
             <td>2026</td>
             <td>熙望上火災後的家,神情哀傷</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災" data-count="2">
             <td>火災</td>
             <td>周理行家</td>
             <td>火災現場3-災後樓下</td>
             <td>2026</td>
             <td>吳望著火災後周家</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="火災" data-count="3">
             <td>火災</td>
             <td>周理行家</td>
             <td>火災現場3-災後樓下</td>
             <td>2026</td>
             <td>熙走進火災後的家</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★★" data-cat="火災">
+        <tr class="shot-row" data-time="2026" data-level="★★★★★" data-cat="火災" data-count="2">
             <td>火災</td>
             <td>郊區平房</td>
             <td>0</td>
             <td>2026</td>
             <td>大火吞噬平房,昌的屍體被燒</td>
             <td>2</td>
-            <td><span class="badge badge-5">★★★★★</span></td>
+            <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★★" data-cat="火災">
+        <tr class="shot-row" data-time="2026" data-level="★★★★★" data-cat="火災" data-count="2">
             <td>火災</td>
             <td>郊區平房</td>
             <td>0</td>
             <td>2026</td>
             <td>平房被大火吞噬</td>
             <td>2</td>
-            <td><span class="badge badge-5">★★★★★</span></td>
+            <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★" data-cat="雨/血">
+        <tr class="shot-row" data-time="2006" data-level="★★" data-cat="雨/血" data-count="2">
             <td>雨/血</td>
             <td>市郊廢棄公寓</td>
             <td>0</td>
             <td>2006</td>
             <td>陽掐住 脖子</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="雨/血">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="雨/血" data-count="2">
             <td>雨/血</td>
             <td>曹以齊境</td>
             <td>0</td>
             <td>2026</td>
             <td>大雨中熙撐傘墳前,手中的花吹歪</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="雨/血">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="雨/血" data-count="2">
             <td>雨/血</td>
             <td>虹昶集團</td>
             <td>董事長辦公室</td>
             <td>2026</td>
             <td>塚將 鑽刺進 脖子</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="雨/血">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="雨/血" data-count="2">
             <td>雨/血</td>
             <td>療養院</td>
             <td>洪炳陽房</td>
             <td>2026</td>
             <td>陽狹持蓮用刀傷,學抱母痛哭</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="雨/血">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="雨/血" data-count="2">
             <td>雨/血</td>
             <td>彭莉蓮別墅</td>
             <td>0</td>
             <td>2026</td>
             <td>陽眼中充滿血絲</td>
             <td>2</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="飛機/鳥 /蜘蛛">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="飛機/鳥 /蜘蛛" data-count="1">
             <td>飛機/鳥 /蜘蛛</td>
             <td>虹昶集團</td>
             <td>股東會迴廊</td>
             <td>2026</td>
             <td>學望著天空,牽起萍的手</td>
             <td>1</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="飛機/鳥 /蜘蛛">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="飛機/鳥 /蜘蛛" data-count="1">
             <td>飛機/鳥 /蜘蛛</td>
             <td>彭莉蓮別墅</td>
             <td>庭院</td>
             <td>2026</td>
             <td>與學躺在草地上望天</td>
             <td>1</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="飛機/鳥 /蜘蛛">
+        <tr class="shot-row" data-time="2026" data-level="★★" data-cat="飛機/鳥 /蜘蛛" data-count="1">
             <td>飛機/鳥 /蜘蛛</td>
             <td>高級會館</td>
             <td>洪珮如房</td>
             <td>2026</td>
             <td>如倚靠窗邊品酒</td>
             <td>1</td>
-            <td><span class="badge badge-2">★★</span></td>
+            <td><span class="badge badge-2">★★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="飛機/鳥 /蜘蛛">
+        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="飛機/鳥 /蜘蛛" data-count="1">
             <td>飛機/鳥 /蜘蛛</td>
             <td>洪珮如辦公室</td>
             <td>0</td>
             <td>2026</td>
             <td>報告珍要將股權移轉給昌</td>
             <td>1</td>
-            <td><span class="badge badge-4">★★★★</span></td>
+            <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="飛機/鳥 /蜘蛛">
+        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="飛機/鳥 /蜘蛛" data-count="1">
             <td>飛機/鳥 /蜘蛛</td>
             <td>洪珮如辦公室</td>
             <td>0</td>
             <td>2026</td>
             <td>如要奪回屬於她的,兩人一同合作</td>
             <td>1</td>
-            <td><span class="badge badge-4">★★★★</span></td>
+            <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="飛機/鳥 /蜘蛛">
+        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="飛機/鳥 /蜘蛛" data-count="1">
             <td>飛機/鳥 /蜘蛛</td>
             <td>洪珮如辦公室</td>
             <td>0</td>
             <td>2026</td>
             <td>熙詢問 知不知道珍與蓮的緋聞</td>
             <td>1</td>
-            <td><span class="badge badge-4">★★★★</span></td>
+            <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="人群複製">
+        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="人群複製" data-count="2">
             <td>人群複製</td>
             <td>虹昶集團</td>
             <td>股東會</td>
             <td>2026</td>
             <td>股東會上陽勝利當選</td>
             <td>2</td>
-            <td><span class="badge badge-4">★★★★</span></td>
+            <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="人群複製">
+        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="人群複製" data-count="2">
             <td>人群複製</td>
             <td>虹昶集團</td>
             <td>臨時股東會</td>
             <td>2026</td>
             <td>虹昶集團重新選舉董事監事 學</td>
             <td>2</td>
-            <td><span class="badge badge-4">★★★★</span></td>
+            <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="人群複製">
+        <tr class="shot-row" data-time="2026" data-level="★★★★" data-cat="人群複製" data-count="2">
             <td>人群複製</td>
             <td>台南棒球場</td>
             <td>0</td>
             <td>2026</td>
             <td>高快步走在人群中</td>
             <td>2</td>
-            <td><span class="badge badge-4">★★★★</span></td>
+            <td><span class="badge badge-4">★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="人群複製">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="人群複製" data-count="2">
             <td>人群複製</td>
             <td>台南棒球場</td>
             <td>貴賓室</td>
             <td>2026</td>
             <td>秦有信心說服章扣押保險箱證據</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="人群複製">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="人群複製" data-count="2">
             <td>人群複製</td>
             <td>台南棒球場</td>
             <td>貴賓室</td>
             <td>2026</td>
             <td>陽稱金流保密,眾人都在同條船</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="人群複製">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="人群複製" data-count="2">
             <td>人群複製</td>
             <td>表演廳</td>
             <td>廳內</td>
             <td>1999</td>
             <td>在台上演奏, 入迷</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="人群複製">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="人群複製" data-count="2">
             <td>人群複製</td>
             <td>臺南飯店宴席廳</td>
             <td>0</td>
             <td>2026</td>
             <td>陽宴請警友會/警察/檢調</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2000" data-level="★★★" data-cat="人群複製">
+        <tr class="shot-row" data-time="2000" data-level="★★★" data-cat="人群複製" data-count="2">
             <td>人群複製</td>
             <td>婚宴餐廳</td>
             <td>0</td>
             <td>2000</td>
             <td>婚宴,逐桌敬酒</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="人群複製">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="人群複製" data-count="2">
             <td>人群複製</td>
             <td>洪成珍堂</td>
             <td>0</td>
             <td>2026</td>
             <td>在靈堂上宣告握有陽的秘密</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★★" data-cat="撞車">
+        <tr class="shot-row" data-time="2026" data-level="★★★★★" data-cat="撞車" data-count="2">
             <td>撞車</td>
             <td>靜的 靈小路</td>
             <td>劉芳菲車上</td>
             <td>2026</td>
             <td>被後車逼車, 車撞上山壁</td>
             <td>2</td>
-            <td><span class="badge badge-5">★★★★★</span></td>
+            <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★★★" data-cat="撞車">
+        <tr class="shot-row" data-time="2026" data-level="★★★★★" data-cat="撞車" data-count="2">
             <td>撞車</td>
             <td>台北街頭</td>
             <td>0</td>
             <td>2026</td>
             <td>丁在街道狂飆,搶黃燈被攔腰撞上</td>
             <td>2</td>
-            <td><span class="badge badge-5">★★★★★</span></td>
+            <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★★★" data-cat="撞車">
+        <tr class="shot-row" data-time="2006" data-level="★★★★★" data-cat="撞車" data-count="2">
             <td>撞車</td>
             <td>市郊廢棄公寓-街道</td>
             <td>廢棄公寓外街道</td>
             <td>2006</td>
             <td>陽追撞車,陽跪下求原諒,撲倒</td>
             <td>2</td>
-            <td><span class="badge badge-5">★★★★★</span></td>
+            <td><span class="badge badge-5">★★★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="年代修圖">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="年代修圖" data-count="2">
             <td>年代修圖</td>
             <td>立法院</td>
             <td>大門/街道</td>
             <td>2026</td>
             <td>高跑到馬路差點被車撞,一身狼狽</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="年代修圖">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="年代修圖" data-count="3">
             <td>年代修圖</td>
             <td>市郊廢棄公寓</td>
             <td>戶外</td>
             <td>2006</td>
             <td>疑車內自殺,丁拍照見疑點</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="年代修圖">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="年代修圖" data-count="3">
             <td>年代修圖</td>
             <td>普通公寓</td>
             <td>原廢棄公寓</td>
             <td>2026</td>
             <td>熙回憶起他記得父親</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="年代修圖">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="年代修圖" data-count="2">
             <td>年代修圖</td>
             <td>湯姆熊遊樂場</td>
             <td>0</td>
             <td>1999</td>
             <td>與林在遊樂場對決電玩</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="年代修圖">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="年代修圖" data-count="3">
             <td>年代修圖</td>
             <td>夜市</td>
             <td>小吃攤</td>
             <td>1999</td>
             <td>三人一同開心吃宵夜</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="年代修圖">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="年代修圖" data-count="3">
             <td>年代修圖</td>
             <td>台北街頭</td>
             <td>101外街道</td>
             <td>1999</td>
             <td>曹在101外從容上計程車</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="年代修圖">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="年代修圖" data-count="2">
             <td>年代修圖</td>
             <td>台北街頭</td>
             <td>10</td>
             <td>1999</td>
             <td>林上計程車,思獨走回家</td>
             <td>2</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="年代修圖">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="年代修圖" data-count="3">
             <td>年代修圖</td>
             <td>丁潮湧車</td>
             <td>郊區道路</td>
             <td>2026</td>
             <td>丁快車前往平房,見遠方火光</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台">
+        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台" data-count="1">
             <td>新聞主播台</td>
             <td>新聞主播台</td>
             <td>0</td>
             <td>2026</td>
             <td>主播播報林司法過勞</td>
             <td>1</td>
-            <td><span class="badge badge-1">★</span></td>
+            <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台">
+        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台" data-count="1">
             <td>新聞主播台</td>
             <td>新聞主播台:</td>
             <td>0</td>
             <td>2026</td>
             <td>主播播報虹昶集團被授</td>
             <td>1</td>
-            <td><span class="badge badge-1">★</span></td>
+            <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台">
+        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台" data-count="1">
             <td>新聞主播台</td>
             <td>新聞主播台A</td>
             <td>10</td>
             <td>2026</td>
             <td>主播播報檢調突襲台南派出所</td>
             <td>1</td>
-            <td><span class="badge badge-1">★</span></td>
+            <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台">
+        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台" data-count="1">
             <td>新聞主播台</td>
             <td>新聞主播台B</td>
             <td>0</td>
             <td>2026</td>
             <td>主播播報洪炳陽捲炒股/賄賂疑雲</td>
             <td>1</td>
-            <td><span class="badge badge-1">★</span></td>
+            <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台">
+        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台" data-count="1">
             <td>新聞主播台</td>
             <td>新聞主播台C</td>
             <td>10</td>
             <td>2026</td>
             <td>主播播報陽勞役作弊</td>
             <td>1</td>
-            <td><span class="badge badge-1">★</span></td>
+            <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台">
+        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台" data-count="1">
             <td>新聞主播台</td>
             <td>新聞主播台D</td>
             <td>0</td>
             <td>2026</td>
             <td>主播播報 能否公正處理陽</td>
             <td>1</td>
-            <td><span class="badge badge-1">★</span></td>
+            <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台">
+        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台" data-count="1">
             <td>新聞主播台</td>
             <td>新聞主播台</td>
             <td>10</td>
             <td>2026</td>
             <td>電視新聞播報吳死</td>
             <td>1</td>
-            <td><span class="badge badge-1">★</span></td>
+            <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台">
+        <tr class="shot-row" data-time="2026" data-level="★" data-cat="新聞主播台" data-count="2">
             <td>新聞主播台</td>
             <td>新聞主播</td>
             <td>主播台</td>
             <td>2026</td>
             <td>播報司法醜聞,</td>
             <td>2</td>
-            <td><span class="badge badge-1">★</span></td>
+            <td><span class="badge badge-1">★ (合成鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2026" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>新聞主播</td>
             <td>主播台</td>
             <td>2026</td>
             <td>主播播報司法高官認罪</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2018" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2018" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地檢署</td>
             <td>檢察官辦公室</td>
             <td>2018</td>
             <td>聽到林 泣聲,兩人聊起初表</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2016" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2016" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>招待所</td>
             <td>10</td>
             <td>2016</td>
             <td>高赤裸上身與兩位女子親密</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2013" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2013" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>周理行家</td>
             <td>餐廳</td>
             <td>2013</td>
             <td>周回憶從舊鋼琴找出照片</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2007" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2007" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>周理行家</td>
             <td>家門口</td>
             <td>2007</td>
             <td>思帶照沿路敲門找工作</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>曹以齊家</td>
             <td>客廳</td>
             <td>2006</td>
             <td>曹向思說已找到證據,思低頭,曹憤恨</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>以齊家</td>
             <td>客廳</td>
             <td>2006</td>
             <td>多家銀行借錢給陽, 贏了陽就會倒</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>曹以齊家</td>
             <td>客廳</td>
             <td>2006</td>
             <td>思不想再被陷害,希望曹放棄</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>曹以齊家</td>
             <td>書房</td>
             <td>2006</td>
             <td>翻閱卷宗找資料</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>老鄰居</td>
             <td>門口</td>
             <td>2006</td>
             <td>鄰居訴說曹家搬離,調查局搜查</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>虹昶集團</td>
             <td>董事長辦公室</td>
             <td>2006</td>
             <td>珍要 放棄上訴,曹要挑戰珍正道</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>虹昶集團</td>
             <td>董事長辦公室</td>
             <td>2006</td>
             <td>陽跪著,珍拿卷宗猛敲陽</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>虹昶集團</td>
             <td>室外停車場</td>
             <td>2006</td>
             <td>與如相會,如帶往見父</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>虹昶集團</td>
             <td>中庭花園</td>
             <td>2006</td>
             <td>如在耳邊低語吳軒輝一事,如爆笑</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>虹集團</td>
             <td>外街道</td>
             <td>2006</td>
             <td>跟蹤,拍到珍與蓮共乘</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>虹集團</td>
             <td>外街道</td>
             <td>2006</td>
             <td>發現在跟拍</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>洪宝</td>
             <td>洪成珍書房</td>
             <td>2006</td>
             <td>蓮懷疑齊有發現她和珍秘密</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>飯店</td>
             <td>飯店房間</td>
             <td>2006</td>
             <td>陽看台北夜景想著被父打,蓮安慰</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>飯店</td>
             <td>飯店房間</td>
             <td>2006</td>
             <td>蓮擔心陽</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>飯店</td>
             <td>飯店房間</td>
             <td>2006</td>
             <td>陽電話告知蓮他殺了齊</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>飯店</td>
             <td>飯店門口</td>
             <td>2006</td>
             <td>坐上吳車</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>高爾夫球場</td>
             <td>球場</td>
             <td>2006</td>
             <td>曹躲樹 ,錄下司法權責一同打球</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>市郊廢棄公寓</td>
             <td>戶外</td>
             <td>2006</td>
             <td>疑車內自殺,丁拍照見疑點</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>市郊廢棄公寓</td>
             <td>戶外</td>
             <td>2006</td>
             <td>陽拖著曹的屍體進車內</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>市郊廢棄公寓</td>
             <td>10</td>
             <td>2006</td>
             <td>陽掐住賣脖子</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>市郊廢棄公寓</td>
             <td>戶外</td>
             <td>2006</td>
             <td>陽掐死,跑回車上打電話</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>市郊廢棄公寓</td>
             <td>戶外</td>
             <td>2006</td>
             <td>蓮佈置自殺現場,突抓手</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>市郊廢棄公寓-街道</td>
             <td>廢棄公寓外街道</td>
             <td>2006</td>
             <td>陽追撞車,陽跪下求原諒,撲倒</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>湯姆熊遊樂場</td>
             <td>0</td>
             <td>2006</td>
             <td>曹交給林一筆錢給照,並說找到證據</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>便利商店</td>
             <td>10</td>
             <td>2006</td>
             <td>鄭拿吳的金流資料給要</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>公園涼亭</td>
             <td>0</td>
             <td>2006</td>
             <td>思不原諒林,但希望林幫</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>公園涼亭</td>
             <td>10</td>
             <td>2006</td>
             <td>要林勤</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>海灘</td>
             <td>0</td>
             <td>2006</td>
             <td>曹一家人在海灘上玩,有人溺水</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>海灘</td>
             <td>10</td>
             <td>2006</td>
             <td>游上岸,救了一件外套,思氣哭</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>海灘</td>
             <td>營火堆</td>
             <td>2006</td>
             <td>看著家人,他不想告陽了</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>海灘</td>
             <td>帳內外</td>
             <td>2006</td>
             <td>齊與思在營火前,思支持 提告</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>挫冰店</td>
             <td>10</td>
             <td>2006</td>
             <td>林吃剉冰, 娘戲問高中小女友呢</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2006" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>台北街道</td>
             <td>圖書館外街道</td>
             <td>2006</td>
             <td>齊從圖書館走出,陽開車跟蹤</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地檢署</td>
             <td>走龍</td>
             <td>2004</td>
             <td>林不滿 說謊,快步離去</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地檢署</td>
             <td>偵查庭</td>
             <td>2004</td>
             <td>林在被告席,曹眼神悲傷</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地檢署</td>
             <td>偵查庭</td>
             <td>2004</td>
             <td>曹說 林當天聚會沒有喝酒</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>台南地檢署</td>
             <td>偵查庭</td>
             <td>2004</td>
             <td>偵訊軒並起訴</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>台南地檢署</td>
             <td>偵查庭</td>
             <td>2004</td>
             <td>偵訊曹</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>走廊</td>
             <td>2004</td>
             <td>走廊上, 狼狽不願屈服,陽大笑離去</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>走廊</td>
             <td>2004</td>
             <td>陽與手下經過, 一人無助</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>法庭</td>
             <td>2004</td>
             <td>侃侃而談,法官宣判,曹判偽造文書</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>法庭</td>
             <td>2004</td>
             <td>軒頂罪,曹質疑是勾串,陽露出笑意</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>法庭</td>
             <td>2004</td>
             <td>陽控曹偽造定存單,賣不認罪</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>法庭</td>
             <td>2004</td>
             <td>定存單被質疑,鄭 卸責醬,林不安</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>法庭</td>
             <td>2004</td>
             <td>銀行副總走向證人席</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>法庭</td>
             <td>2004</td>
             <td>副總指曹影響銀行信譽,被背叛</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>法庭</td>
             <td>2004</td>
             <td>軒頂罪,曹質疑是勾串,陽露出笑意</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>法庭</td>
             <td>2004</td>
             <td>方鴻財審判曹案</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>刑事法庭</td>
             <td>2004</td>
             <td>陽在法庭上原諒軒</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>以齊家</td>
             <td>客廳/門口</td>
             <td>2004</td>
             <td>林透露要去考司法考</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>曹以齊家</td>
             <td>客廳/門口</td>
             <td>2004</td>
             <td>曹與思目送林離開</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>以齊家</td>
             <td>樓下</td>
             <td>2004</td>
             <td>林酒醉稍退,決定騎車回家</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>曹以齊家</td>
             <td>0</td>
             <td>2004</td>
             <td>抓周,曹深情紀錄</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>虹昶集團</td>
             <td>工廠角落</td>
             <td>2004</td>
             <td>陽找軒來頂罪</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>彭莉蓮別墅</td>
             <td>花園</td>
             <td>2004</td>
             <td>看著花園發呆,蓮從後環抱</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>彭莉蓮別墅</td>
             <td>客廳</td>
             <td>2004</td>
             <td>蓮拉起陽起舞,洪無聲哭了蓮安慰</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>彭莉蓮別墅</td>
             <td>外/大門/客廳</td>
             <td>2004</td>
             <td>珍去別墅探望學</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>彭莉蓮別墅</td>
             <td>外街道</td>
             <td>2004</td>
             <td>珍慈愛看著學,手放上蓮大腿上</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>高爾夫球場</td>
             <td>球場/陽傘休息區</td>
             <td>2004</td>
             <td>陽要大家幫忙處理金雀案</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>高爾夫球場</td>
             <td>陽傘休息區</td>
             <td>2004</td>
             <td>高提議找人頂罪</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>高爾夫球場</td>
             <td>陽傘休息區</td>
             <td>2004</td>
             <td>彪建議可以對 提起告訴</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>高爾夫球場</td>
             <td>陽傘休息區</td>
             <td>2004</td>
             <td>建議金管會可以向銀行施壓</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>高爾夫球場</td>
             <td>球場</td>
             <td>2004</td>
             <td>建議趙用匿名檢舉,使曹被調查</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>台南棒球場</td>
             <td>貴賓包廂</td>
             <td>2004</td>
             <td>0</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>金銀行</td>
             <td>會議室</td>
             <td>2004</td>
             <td>帳目被金管會查核, 威爾賀偽造</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>金銀行</td>
             <td>會議室</td>
             <td>2004</td>
             <td>調查局查帳務資料, 在旁陪笑</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>金金銀行</td>
             <td>會議室</td>
             <td>2004</td>
             <td>金管會向銀行高層施壓</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>金錢銀行</td>
             <td>辦公區</td>
             <td>2004</td>
             <td>收拾座位物品,神情落寞</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>金金銀行</td>
             <td>大門</td>
             <td>2004</td>
             <td>兩人無語問蒼天</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>飯店</td>
             <td>餐廳</td>
             <td>2004</td>
             <td>陽宴請司法權貴</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>虹昶集團</td>
             <td>舊廠辦交誼廳</td>
             <td>2004</td>
             <td>蓮與陽兩人在工廠結婚跳舞</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>日本料理店</td>
             <td>10</td>
             <td>2004</td>
             <td>酒後林向楠透露無擔保定存單一事</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>台北街道</td>
             <td>巷弄</td>
             <td>2004</td>
             <td>林酒逃逸</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>各種出遊畫面</td>
             <td>各種場景</td>
             <td>2004</td>
             <td>一家人各種出遊畫面</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2004" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>派出所</td>
             <td>0</td>
             <td>2004</td>
             <td>詢問軒,製作筆錄</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>地方法院</td>
             <td>簡易法庭</td>
             <td>2003</td>
             <td>曹與陽法庭爭辦,陽口吃</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>以齊家</td>
             <td>餐廳/客廳/廚房</td>
             <td>2003</td>
             <td>三人吃火鍋,林建議定存單擔保</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>曹以齊家</td>
             <td>客廳</td>
             <td>2003</td>
             <td>思大肚子優雅彈琴,齊拍照唱歌</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>曹以齊家</td>
             <td>臥室</td>
             <td>2003</td>
             <td>DV拍攝熟睡的愛女,與妻相吻</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>虹昶集團</td>
             <td>會議室</td>
             <td>2003</td>
             <td>青陽債務協商,曹 陽自尊</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>虹昶集團</td>
             <td>董事長辦公室</td>
             <td>2003</td>
             <td>珍看公司財報,拿鞋去陽</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2003" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>金銀行</td>
             <td>副總辦公室</td>
             <td>2003</td>
             <td>示警虹集團有債務風險</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2000" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2000" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>婚宴餐廳</td>
             <td>0</td>
             <td>2000</td>
             <td>曹思婚宴,逐桌敬酒</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2000" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2000" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>婚宴餐廳</td>
             <td>新人休息室</td>
             <td>2000</td>
             <td>酒醉,謝林將思介紹給他</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="2000" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="2000" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>婚宴餐廳</td>
             <td>門口</td>
             <td>2000</td>
             <td>林送兩人上車,一人獨走</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>金銀行</td>
             <td>副總辦公室</td>
             <td>1999</td>
             <td>曹爭論卡價欲離職,副總將其調</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>表演廳</td>
             <td>剪票口</td>
             <td>1999</td>
             <td>兩人整理儀態走向剪票口</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>表演廳</td>
             <td>廳內</td>
             <td>1999</td>
             <td>思在台上演奏,曹入迷</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>表演廳</td>
             <td>廳內</td>
             <td>1999</td>
             <td>散場後,曹感動落淚</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>迪斯可舞廳</td>
             <td>舞池</td>
             <td>1999</td>
             <td>曹思在舞池跳舞,曹聊著未來要想</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>湯姆熊遊樂場</td>
             <td>10</td>
             <td>1999</td>
             <td>林在遊樂場對決電玩</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>老婦人家</td>
             <td>客廳</td>
             <td>1999</td>
             <td>法院查封老婦屋,婦割腕曹</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>夜市</td>
             <td>小吃攤</td>
             <td>1999</td>
             <td>三人一同開心吃宵夜</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>台北街頭</td>
             <td>101外街道</td>
             <td>1999</td>
             <td>曹在101外從容上計程車</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>台北街頭</td>
             <td>10</td>
             <td>1999</td>
             <td>兩人喝酒在街上狂奔</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>台北街頭</td>
             <td>0</td>
             <td>1999</td>
             <td>與林上計程車,思獨走回家</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1999" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>台北街頭</td>
             <td>巷弄</td>
             <td>1999</td>
             <td>讚思的演奏,心生情愫</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1998" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1998" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>彭莉蓮別墅</td>
             <td>庭院</td>
             <td>1998</td>
             <td>陽抱著珍在庭院跳舞</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1998" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1998" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>醫院</td>
             <td>產房</td>
             <td>1998</td>
             <td>痛苦的生產,陽抱小孩微笑</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1997" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1997" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>虹昶集團</td>
             <td>董事長辦公室</td>
             <td>1997</td>
             <td>珍將蓮安排陽身旁做秘書</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     
-        <tr class="shot-row" data-time="1997" data-level="★★★" data-cat="減齡特效">
+        <tr class="shot-row" data-time="1997" data-level="★★★" data-cat="減齡特效" data-count="3">
             <td>減齡特效</td>
             <td>洪成珍車上</td>
             <td>0</td>
             <td>1997</td>
             <td>珍將手放在蓮的腿上</td>
             <td>3</td>
-            <td><span class="badge badge-3">★★★</span></td>
+            <td><span class="badge badge-3">★★★ (特效鏡頭)</span></td>
         </tr>
     </tbody>
                     </table>
@@ -2144,7 +2167,7 @@
         const data = {
             heavy: {
                 budget: '$9,230,000', shots: '472 顆', days: '1,420 天', avg: '$19,555', note: false,
-                pieLabels: ['★★★ (特效鏡頭)', '★★ (合成鏡頭)', '★★★★★ (特效鏡頭)', '★★★★ (特效鏡頭)', '★ (合成鏡頭)'],
+                pieLabels: ['★★★', '★★', '★★★★★', '★★★★', '★'],
                 pieData: [79.2, 8.5, 6.4, 5.3, 0.6],
                 pieColors: ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#95a5a6'],
                 starCounts: [
@@ -2165,7 +2188,7 @@
             },
             smooth: {
                 budget: '$7,163,000', shots: '472 顆', days: '1,102 天', avg: '$15,176', note: false,
-                pieLabels: ['★★ (合成鏡頭)', '★★★ (特效鏡頭)', '★★★★★ (特效鏡頭)', '★★★★ (特效鏡頭)', '★ (合成鏡頭)'],
+                pieLabels: ['★★', '★★★', '★★★★★', '★★★★', '★'],
                 pieData: [68.6, 15.5, 8.3, 6.8, 0.8],
                 pieColors: ['#2ecc71', '#3498db', '#e74c3c', '#f39c12', '#95a5a6'],
                 starCounts: [
@@ -2186,7 +2209,7 @@
             },
             actor: {
                 budget: '$3,029,000', shots: '154 顆', days: '466 天', avg: '$19,669', note: true,
-                pieLabels: ['★★★ (特效鏡頭)', '★★ (合成鏡頭)', '★★★★★ (特效鏡頭)', '★★★★ (特效鏡頭)', '★ (合成鏡頭)'],
+                pieLabels: ['★★★', '★★', '★★★★★', '★★★★', '★'],
                 pieData: [36.7, 25.8, 19.5, 16.1, 1.9],
                 pieColors: ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#95a5a6'],
                 starCounts: [
@@ -2301,6 +2324,7 @@
             } else if(tabKey === 'list') {
                 btn.style.background = '#9b59b6';
                 btn.style.boxShadow = '0 4px 15px rgba(155, 89, 182, 0.4)';
+                filterTable(); // Trigger calculation when entering list view
             }
 
             const dashView = document.getElementById('dashboard-view');
@@ -2334,10 +2358,23 @@
             const catFilter = document.getElementById('filter-cat').value;
             const rows = document.querySelectorAll('.shot-row');
             
+            let totalShots = 0;
+            let totalCost = 0;
+            
+            const costMap = {
+                'S': 10 * 6500,
+                '★★★★★': 7 * 6500,
+                '★★★★': 5 * 6500,
+                '★★★': 3 * 6500,
+                '★★': 2 * 6500,
+                '★': 1 * 6500
+            };
+
             rows.forEach(row => {
                 const t = row.getAttribute('data-time');
                 const star = row.getAttribute('data-level');
                 const cat = row.getAttribute('data-cat');
+                const count = parseInt(row.getAttribute('data-count')) || 0;
                 
                 const timeMatch = (timeFilter === 'all') || (t === timeFilter);
                 const starMatch = (starFilter === 'all') || (star === starFilter);
@@ -2345,15 +2382,29 @@
                 
                 if (timeMatch && starMatch && catMatch) {
                     row.classList.remove('hidden');
+                    totalShots += count;
+                    
+                    let baseStar = '★';
+                    if (star.includes('S')) baseStar = 'S';
+                    else if (star.includes('★★★★★')) baseStar = '★★★★★';
+                    else if (star.includes('★★★★')) baseStar = '★★★★';
+                    else if (star.includes('★★★')) baseStar = '★★★';
+                    else if (star.includes('★★')) baseStar = '★★';
+                    
+                    totalCost += count * (costMap[baseStar] || 0);
                 } else {
                     row.classList.add('hidden');
                 }
             });
+            
+            document.getElementById('filtered-shots-count').innerText = totalShots;
+            document.getElementById('filtered-total-cost').innerText = '$' + totalCost.toLocaleString();
         }
 
         initPieChart();
         renderBars('cat-charts', data['heavy'].cats);
         renderStarCounts(data['heavy'].starCounts);
+        filterTable(); // Initial calculation
     </script>
 </body>
 </html>
