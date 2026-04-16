@@ -275,7 +275,7 @@
                 <button class="tab-btn active" onclick="switchTab('heavy', this)" style="background:#3498db; box-shadow:0 4px 15px rgba(52, 152, 219, 0.4); color:white; border-color:rgba(255,255,255,0.8); transform: translateY(-3px);">大幅度減齡方案</button>
                 <button class="tab-btn" onclick="switchTab('smooth', this)">2D磨皮減齡方案</button>
                 <button class="tab-btn" onclick="switchTab('actor', this)">演員方案 (移除減齡)</button>
-                <button class="tab-btn" onclick="switchTab('list', this)">完整鏡頭清單</button>
+                <button class="tab-btn" onclick="switchTab('list', this)">📋 完整鏡頭清單</button>
                 <button class="tab-btn" onclick="switchTab('rules', this)">📝 備註</button>
             </div>
         </header>
@@ -299,9 +299,6 @@
                     <span class="kpi-label">預估人天</span>
                     <span class="kpi-value" id="kpi-days" style="color:var(--accent-purple);">0 天</span>
                 </div>
-                                <div style="width: 100%; margin-top: 10px; font-size: 13px; color: #aaa;">
-                    ＊註：此「預估人天」為依鏡頭難度折算之『報價基準單位』，僅供預算規模評估使用，非實際製作之日曆時程。
-                </div>
                 <div class="kpi-card">
                     <span class="kpi-label">單顆平均成本</span>
                     <span class="kpi-value" id="kpi-avg" style="color:var(--accent-orange);">$0</span>
@@ -318,7 +315,9 @@
                 <span class="std-badge b3">★★★ (特效鏡頭): 3天</span>
                 <span class="std-badge b2">★★ (合成鏡頭): 2天</span>
                 <span class="std-badge b1">★ (合成鏡頭): 1天</span>
-
+                <div style="width: 100%; margin-top: 10px; font-size: 13px; color: #aaa;">
+                    ＊註：此「預估人天」為依鏡頭難度折算之『報價基準單位』，僅供預算規模評估使用，非實際製作之日曆時程。
+                </div>
             </div>
 
             <div class="chart-grid">
