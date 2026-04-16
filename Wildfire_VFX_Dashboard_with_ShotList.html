@@ -155,17 +155,50 @@
         ::-webkit-scrollbar-thumb { background: #4a4a4a; border-radius: 8px; border: 2px solid #1e1e1e; }
         ::-webkit-scrollbar-thumb:hover { background: #666; }
 
+        /* Multi-select check filters */
         .filter-section {
             background: #2a2a2a;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 15px;
             display: flex;
-            gap: 20px;
-            align-items: center;
+            flex-direction: column;
+            gap: 15px;
         }
-        .filter-group { display: flex; align-items: center; gap: 10px; }
-        select { padding: 8px; border-radius: 4px; background: #444; color: white; border: 1px solid #555; outline: none; }
+        .filter-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .filter-label {
+            font-weight: bold;
+            color: var(--accent-blue);
+            min-width: 90px;
+            padding-top: 5px;
+        }
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .chk-btn {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .chk-btn input { display: none; }
+        .chk-btn.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+            font-weight: bold;
+        }
         
         /* Dynamic List Summary Panel */
         .list-summary-panel {
@@ -245,7 +278,7 @@
                     <span class="kpi-value" id="kpi-shots" style="color:var(--accent-blue);">472 顆</span>
                 </div>
                 <div class="kpi-card">
-                    <span class="kpi-label">預估工期 (人天)</span>
+                    <span class="kpi-label">預估人天</span>
                     <span class="kpi-value" id="kpi-days" style="color:var(--accent-purple);">1,420 天</span>
                 </div>
                 <div class="kpi-card">
@@ -284,30 +317,38 @@
         </div>
 
         <div id="table-view" class="table-view">
-            <div class="filter-section">
-                <div class="filter-group">
-                    <label>🎬 類別篩選：</label>
-                    <select id="filter-cat" onchange="filterTable()">
-                        <option value='all'>所有特效類別</option><option value='人群複製'>人群複製</option><option value='年代修圖'>年代修圖</option><option value='撞車'>撞車</option><option value='新聞主播台'>新聞主播台</option><option value='減齡特效'>減齡特效</option><option value='火災'>火災</option><option value='畫面合成'>畫面合成</option><option value='雨/血'>雨/血</option><option value='飛機/鳥 /蜘蛛'>飛機/鳥 /蜘蛛</option>
-                    </select>
+            <!-- Multi-Select Filters -->
+            <div class="filter-section" id="filter-section">
+                
+                <div class="filter-row">
+                    <div class="filter-label">🎬 類別篩選</div>
+                    <div class="filter-options">
+                        <label class="chk-btn active"><input type="checkbox" value="all" data-type="cat" checked onchange="handleCheckbox(this)">全部</label>
+                        <label class="chk-btn"><input type="checkbox" value="人群複製" data-type="cat" onchange="handleCheckbox(this)">人群複製</label><label class="chk-btn"><input type="checkbox" value="年代修圖" data-type="cat" onchange="handleCheckbox(this)">年代修圖</label><label class="chk-btn"><input type="checkbox" value="撞車" data-type="cat" onchange="handleCheckbox(this)">撞車</label><label class="chk-btn"><input type="checkbox" value="新聞主播台" data-type="cat" onchange="handleCheckbox(this)">新聞主播台</label><label class="chk-btn"><input type="checkbox" value="減齡特效" data-type="cat" onchange="handleCheckbox(this)">減齡特效</label><label class="chk-btn"><input type="checkbox" value="火災" data-type="cat" onchange="handleCheckbox(this)">火災</label><label class="chk-btn"><input type="checkbox" value="畫面合成" data-type="cat" onchange="handleCheckbox(this)">畫面合成</label><label class="chk-btn"><input type="checkbox" value="雨/血" data-type="cat" onchange="handleCheckbox(this)">雨/血</label><label class="chk-btn"><input type="checkbox" value="飛機/鳥 /蜘蛛" data-type="cat" onchange="handleCheckbox(this)">飛機/鳥 /蜘蛛</label>
+                    </div>
                 </div>
-                <div class="filter-group">
-                    <label>⏱️ 劇中時間：</label>
-                    <select id="filter-time" onchange="filterTable()">
-                        <option value='all'>所有劇中時間</option><option value='1997'>1997</option><option value='1998'>1998</option><option value='1999'>1999</option><option value='2000'>2000</option><option value='2003'>2003</option><option value='2004'>2004</option><option value='2006'>2006</option><option value='2007'>2007</option><option value='2013'>2013</option><option value='2016'>2016</option><option value='2018'>2018</option><option value='2026'>2026</option>
-                    </select>
+
+                <div class="filter-row">
+                    <div class="filter-label">⏱️ 劇中時間</div>
+                    <div class="filter-options">
+                        <label class="chk-btn active"><input type="checkbox" value="all" data-type="time" checked onchange="handleCheckbox(this)">全部</label>
+                        <label class="chk-btn"><input type="checkbox" value="1997" data-type="time" onchange="handleCheckbox(this)">1997</label><label class="chk-btn"><input type="checkbox" value="1998" data-type="time" onchange="handleCheckbox(this)">1998</label><label class="chk-btn"><input type="checkbox" value="1999" data-type="time" onchange="handleCheckbox(this)">1999</label><label class="chk-btn"><input type="checkbox" value="2000" data-type="time" onchange="handleCheckbox(this)">2000</label><label class="chk-btn"><input type="checkbox" value="2003" data-type="time" onchange="handleCheckbox(this)">2003</label><label class="chk-btn"><input type="checkbox" value="2004" data-type="time" onchange="handleCheckbox(this)">2004</label><label class="chk-btn"><input type="checkbox" value="2006" data-type="time" onchange="handleCheckbox(this)">2006</label><label class="chk-btn"><input type="checkbox" value="2007" data-type="time" onchange="handleCheckbox(this)">2007</label><label class="chk-btn"><input type="checkbox" value="2013" data-type="time" onchange="handleCheckbox(this)">2013</label><label class="chk-btn"><input type="checkbox" value="2016" data-type="time" onchange="handleCheckbox(this)">2016</label><label class="chk-btn"><input type="checkbox" value="2018" data-type="time" onchange="handleCheckbox(this)">2018</label><label class="chk-btn"><input type="checkbox" value="2026" data-type="time" onchange="handleCheckbox(this)">2026</label>
+                    </div>
                 </div>
-                <div class="filter-group">
-                    <label>⭐ 等級篩選：</label>
-                    <select id="filter-star" onchange="filterTable()">
-                        <option value='all'>所有等級</option><option value='★★★★★'>★★★★★ (特效鏡頭)</option><option value='★★★★'>★★★★ (特效鏡頭)</option><option value='★★★'>★★★ (特效鏡頭)</option><option value='★★'>★★ (合成鏡頭)</option><option value='★'>★ (合成鏡頭)</option>
-                    </select>
+
+                <div class="filter-row">
+                    <div class="filter-label">⭐ 等級篩選</div>
+                    <div class="filter-options">
+                        <label class="chk-btn active"><input type="checkbox" value="all" data-type="star" checked onchange="handleCheckbox(this)">全部</label>
+                        <label class="chk-btn"><input type="checkbox" value="★★★★★" data-type="star" onchange="handleCheckbox(this)">★★★★★</label><label class="chk-btn"><input type="checkbox" value="★★★★" data-type="star" onchange="handleCheckbox(this)">★★★★</label><label class="chk-btn"><input type="checkbox" value="★★★" data-type="star" onchange="handleCheckbox(this)">★★★</label><label class="chk-btn"><input type="checkbox" value="★★" data-type="star" onchange="handleCheckbox(this)">★★</label><label class="chk-btn"><input type="checkbox" value="★" data-type="star" onchange="handleCheckbox(this)">★</label>
+                    </div>
                 </div>
+
             </div>
 
             <!-- Dynamic List Summary -->
             <div class="list-summary-panel">
-                <div class="sum-title">🎯 當前篩選結果：</div>
+                <div class="sum-title">🎯 當前條件：</div>
                 <div>總計鏡頭 <span class="sum-value blue" id="filtered-shots-count">0</span> 顆</div>
                 <div>預估總金額 <span class="sum-value orange" id="filtered-total-cost">$0</span></div>
             </div>
@@ -2324,7 +2365,7 @@
             } else if(tabKey === 'list') {
                 btn.style.background = '#9b59b6';
                 btn.style.boxShadow = '0 4px 15px rgba(155, 89, 182, 0.4)';
-                filterTable(); // Trigger calculation when entering list view
+                filterTable(); 
             }
 
             const dashView = document.getElementById('dashboard-view');
@@ -2352,10 +2393,62 @@
             }
         }
 
+        // Multi-select logic
+        function handleCheckbox(checkbox) {
+            const type = checkbox.getAttribute('data-type');
+            const label = checkbox.parentElement;
+            const container = label.parentElement;
+            
+            if (checkbox.value === 'all') {
+                // If 'all' is clicked, uncheck others in this group
+                if (checkbox.checked) {
+                    const allBoxes = container.querySelectorAll('input[type="checkbox"]');
+                    allBoxes.forEach(box => {
+                        if (box !== checkbox) {
+                            box.checked = false;
+                            box.parentElement.classList.remove('active');
+                        }
+                    });
+                    label.classList.add('active');
+                } else {
+                    // Prevent unchecking 'all' if nothing else is selected
+                    checkbox.checked = true;
+                }
+            } else {
+                // If a specific option is clicked, uncheck 'all'
+                if (checkbox.checked) {
+                    label.classList.add('active');
+                    const allBtn = container.querySelector('input[value="all"]');
+                    if (allBtn) {
+                        allBtn.checked = false;
+                        allBtn.parentElement.classList.remove('active');
+                    }
+                } else {
+                    label.classList.remove('active');
+                    // If everything is unchecked, re-check 'all'
+                    const anyChecked = Array.from(container.querySelectorAll('input[type="checkbox"]')).some(b => b.checked);
+                    if (!anyChecked) {
+                        const allBtn = container.querySelector('input[value="all"]');
+                        allBtn.checked = true;
+                        allBtn.parentElement.classList.add('active');
+                    }
+                }
+            }
+            
+            filterTable();
+        }
+
         function filterTable() {
-            const timeFilter = document.getElementById('filter-time').value;
-            const starFilter = document.getElementById('filter-star').value;
-            const catFilter = document.getElementById('filter-cat').value;
+            // Get selected values for each category
+            const getSelected = (type) => {
+                const inputs = document.querySelectorAll(`input[data-type="${type}"]:checked`);
+                return Array.from(inputs).map(i => i.value);
+            };
+
+            const selectedCats = getSelected('cat');
+            const selectedTimes = getSelected('time');
+            const selectedStars = getSelected('star');
+
             const rows = document.querySelectorAll('.shot-row');
             
             let totalShots = 0;
@@ -2376,9 +2469,9 @@
                 const cat = row.getAttribute('data-cat');
                 const count = parseInt(row.getAttribute('data-count')) || 0;
                 
-                const timeMatch = (timeFilter === 'all') || (t === timeFilter);
-                const starMatch = (starFilter === 'all') || (star === starFilter);
-                const catMatch = (catFilter === 'all') || (cat === catFilter);
+                const catMatch = selectedCats.includes('all') || selectedCats.includes(cat);
+                const timeMatch = selectedTimes.includes('all') || selectedTimes.includes(t);
+                const starMatch = selectedStars.includes('all') || selectedStars.includes(star);
                 
                 if (timeMatch && starMatch && catMatch) {
                     row.classList.remove('hidden');
@@ -2404,7 +2497,7 @@
         initPieChart();
         renderBars('cat-charts', data['heavy'].cats);
         renderStarCounts(data['heavy'].starCounts);
-        filterTable(); // Initial calculation
+        filterTable(); 
     </script>
 </body>
 </html>
